@@ -1,0 +1,1025 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Les Travaux Pratiques du cours Big Data">
+      
+      
+        <link rel="canonical" href="http://INSATunisia.github.io/TP-BigData/tp1/">
+      
+      
+        <meta name="author" content="Lilia Sfaxi">
+      
+      
+        <link rel="shortcut icon" href="../img/favicon.ico">
+      
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-1.7.1">
+    
+    
+      
+        <title>TP1 - TP Big Data</title>
+      
+    
+    
+      <script src="../assets/javascripts/modernizr-1df76c4e58.js"></script>
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application-2421e7e627.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-8817cfa535.palette.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+
+    <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+    <link rel="stylesheet" href="../css/highlight.css">
+    <link rel="stylesheet" href="../css/codehilite.css">
+    <link rel="stylesheet" href="../css/tooltip.css">
+
+    <link rel="stylesheet" href="../css/customizations.css">
+    <link rel="stylesheet" href="../css/site-customizations.css">
+  </head>
+  
+  
+  
+  
+    <body data-md-color-primary="blue" data-md-color-accent="yellow">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="http://INSATunisia.github.io/TP-BigData/" title="TP Big Data" class="md-logo md-header-nav__button">
+            <img src="../img/logo.png" width="24" height="24">
+          </a>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+            
+            TP1
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <div class="md-header-nav__source">
+          
+            
+
+
+  
+
+
+  <a href="https://github.com/INSATunisia/TP-BigData/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      INSATunisia/TP-BigData
+    </div>
+  </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-logo md-nav__button">
+        <img src="../img/logo.png">
+      </i>
+    
+    TP Big Data
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/INSATunisia/TP-BigData/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      INSATunisia/TP-BigData
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Travaux Pratiques Big Data" class="md-nav__link">
+      Travaux Pratiques Big Data
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        TP1
+      </label>
+    
+    <a href="./" title="TP1" class="md-nav__link md-nav__link--active">
+      TP1
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#telecharger-pdf" title="Télécharger PDF" class="md-nav__link">
+    Télécharger PDF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objectifs-du-tp" title="Objectifs du TP" class="md-nav__link">
+    Objectifs du TP
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outils-et-versions" title="Outils et Versions" class="md-nav__link">
+    Outils et Versions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hadoop" title="Hadoop" class="md-nav__link">
+    Hadoop
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presentation" title="Présentation" class="md-nav__link">
+    Présentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hadoop-et-docker" title="Hadoop et Docker" class="md-nav__link">
+    Hadoop et Docker
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation" title="Installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#premiers-pas-avec-hadoop" title="Premiers pas avec Hadoop" class="md-nav__link">
+    Premiers pas avec Hadoop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interfaces-web-pour-hadoop" title="Interfaces web pour Hadoop" class="md-nav__link">
+    Interfaces web pour Hadoop
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#map-reduce" title="Map Reduce" class="md-nav__link">
+    Map Reduce
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presentation_1" title="Présentation" class="md-nav__link">
+    Présentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordcount" title="Wordcount" class="md-nav__link">
+    Wordcount
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tester-map-reduce-en-local" title="Tester Map Reduce en local" class="md-nav__link">
+    Tester Map Reduce en local
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lancer-map-reduce-sur-le-cluster" title="Lancer Map Reduce sur le cluster" class="md-nav__link">
+    Lancer Map Reduce sur le cluster
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#homework" title="Homework" class="md-nav__link">
+    Homework
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../tp2/" title="TP2" class="md-nav__link">
+      TP2
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../tp3/" title="TP3" class="md-nav__link">
+      TP3
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../tp4/" title="TP4" class="md-nav__link">
+      TP4
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../tp5/" title="TP5" class="md-nav__link">
+      TP5
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#telecharger-pdf" title="Télécharger PDF" class="md-nav__link">
+    Télécharger PDF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objectifs-du-tp" title="Objectifs du TP" class="md-nav__link">
+    Objectifs du TP
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outils-et-versions" title="Outils et Versions" class="md-nav__link">
+    Outils et Versions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hadoop" title="Hadoop" class="md-nav__link">
+    Hadoop
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presentation" title="Présentation" class="md-nav__link">
+    Présentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hadoop-et-docker" title="Hadoop et Docker" class="md-nav__link">
+    Hadoop et Docker
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation" title="Installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#premiers-pas-avec-hadoop" title="Premiers pas avec Hadoop" class="md-nav__link">
+    Premiers pas avec Hadoop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interfaces-web-pour-hadoop" title="Interfaces web pour Hadoop" class="md-nav__link">
+    Interfaces web pour Hadoop
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#map-reduce" title="Map Reduce" class="md-nav__link">
+    Map Reduce
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presentation_1" title="Présentation" class="md-nav__link">
+    Présentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordcount" title="Wordcount" class="md-nav__link">
+    Wordcount
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tester-map-reduce-en-local" title="Tester Map Reduce en local" class="md-nav__link">
+    Tester Map Reduce en local
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lancer-map-reduce-sur-le-cluster" title="Lancer Map Reduce sur le cluster" class="md-nav__link">
+    Lancer Map Reduce sur le cluster
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#homework" title="Homework" class="md-nav__link">
+    Homework
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/INSATunisia/TP-BigData/edit/master/docs/tp1.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                
+                
+                <h1 id="tp1-le-traitement-batch-avec-hadoop-hdfs-et-map-reduce">TP1 - Le traitement Batch avec Hadoop HDFS et Map Reduce<a class="headerlink" href="#tp1-le-traitement-batch-avec-hadoop-hdfs-et-map-reduce" title="Permanent link">&para;</a></h1>
+<p><center><img alt="Batch Processing" src="../img/batch.png" /></center></p>
+<h2 id="telecharger-pdf">Télécharger PDF<a class="headerlink" href="#telecharger-pdf" title="Permanent link">&para;</a></h2>
+<p><a href="../tp1.pdf"><img alt="Download TP1" src="../img/pdf.png" /></a></p>
+<h2 id="objectifs-du-tp">Objectifs du TP<a class="headerlink" href="#objectifs-du-tp" title="Permanent link">&para;</a></h2>
+<p>Initiation au framework hadoop et au patron MapReduce, utilisation de docker pour lancer un cluster hadoop de 3 noeuds.</p>
+<h2 id="outils-et-versions">Outils et Versions<a class="headerlink" href="#outils-et-versions" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="http://hadoop.apache.org/">Apache Hadoop</a> Version: 2.7.2.</li>
+<li><a href="https://www.docker.com/">Docker</a> Version 17.09.1</li>
+<li><a href="https://www.jetbrains.com/idea/download/">IntelliJ IDEA</a> Version Ultimate 2016.1 (ou tout autre IDE de votre choix)</li>
+<li><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java</a> Version 1.8.</li>
+<li>Unix-like ou Unix-based Systems (Divers Linux et MacOS)</li>
+</ul>
+<h2 id="hadoop">Hadoop<a class="headerlink" href="#hadoop" title="Permanent link">&para;</a></h2>
+<h3 id="presentation">Présentation<a class="headerlink" href="#presentation" title="Permanent link">&para;</a></h3>
+<p><a href="../hadoop.apache.org">Apache Hadoop</a> est un framework open-source pour stocker et traiter les données volumineuses sur un cluster. Il est utilisé par un grand nombre de contributeurs et utilisateurs. Il a une licence Apache 2.0.</p>
+<p><center><img src="../img/tp1/hadoop.png" width="200"></center></p>
+<h3 id="hadoop-et-docker">Hadoop et Docker<a class="headerlink" href="#hadoop-et-docker" title="Permanent link">&para;</a></h3>
+<p>Pour déployer le framework Hadoop, nous allons utiliser des contenaires <a href="https://www.docker.com/">Docker</a>. L'utilisation des contenaires va garantir la consistance entre les environnements de développement et permettra de réduire considérablement la complexité de configuration des machines (dans le cas d'un accès natif) ainsi que la lourdeur d'exécution (si on opte pour l'utilisation d'une machine virtuelle).</p>
+<p>Nous avons pour le déploiement des ressources de ce TP suivi les instructions présentées <a href="https://github.com/kiwenlau/hadoop-cluster-docker">ici</a>.</p>
+<h3 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
+<p>Nous allons utiliser tout au long de ce TP trois contenaires représentant respectivement un noeud maître (Namenode) et deux noeuds esclaves (Datanodes).</p>
+<p>Vous devez pour cela avoir installé docker sur votre machine, et l'avoir correctement configuré. Ouvrir la ligne de commande, et taper les instructions suivantes:</p>
+<ol>
+<li>Faire un pull de l'image docker:<br />
+<div class="codehilite"><pre><span></span>  sudo docker pull kiwenlau/hadoop:1.0
+</pre></div></li>
+<li>Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:<br />
+<div class="codehilite"><pre><span></span>  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
+</pre></div></li>
+<li>Créer le réseau Hadoop:<br />
+<div class="codehilite"><pre><span></span>  sudo docker network create --driver<span class="o">=</span>bridge hadoop
+</pre></div></li>
+<li>Démarrer les trois contenaires:<br />
+<div class="codehilite"><pre><span></span>  <span class="nb">cd</span> hadoop-cluster-docker
+  sudo ./start-container.sh
+</pre></div></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Attention</p>
+<p>Le script <em>start-container.sh</em> va réinitialiser les trois contenaires. Si vous voulez redémarrer un contenaire déjà créé, il ne faut pas l'exécuter de nouveau: tout sera effacé. Au lieu de cela, taper simplement (pour le master container, par exemple):<br />
+<code>docker exec -it hadoop-master bash</code></p>
+</div>
+<p>Le résultat de cette exécution sera le suivant:</p>
+<div class="codehilite"><pre><span></span>  start hadoop-master container...
+  start hadoop-slave1 container...
+  start hadoop-slave2 container...
+  root@hadoop-master:~#
+</pre></div>
+
+<p>Vous vous retrouverez dans le shell du namenode, et vous pourrez ainsi manipuler le cluster à votre guise. La première chose à faire, une fois dans le contenaire, est de lancer hadoop et yarn. Un script est fourni pour cela, appelé <em>start-hadoop.sh</em>. Lancer ce script.</p>
+<div class="codehilite"><pre><span></span>  ./start-hadoop.sh
+</pre></div>
+
+<p>Le résultat devra ressembler à ce qui suit:<br />
+<img alt="Start Hadoop" src="../img/tp1/start-hadoop.png" /></p>
+<h3 id="premiers-pas-avec-hadoop">Premiers pas avec Hadoop<a class="headerlink" href="#premiers-pas-avec-hadoop" title="Permanent link">&para;</a></h3>
+<p>Toutes les commandes interagissant avec le système Hadoop commencent par hadoop fs. Ensuite, les options rajoutées sont très largement inspirées des commandes Unix standard.</p>
+<ul>
+<li>Créer un répertoire dans HDFS, appelé <em>input</em>. Pour cela, taper:<br />
+<div class="codehilite"><pre><span></span>  hadoop fs –mkdir -p input
+</pre></div></li>
+</ul>
+<div class="admonition bug">
+<p class="admonition-title">Erreur</p>
+<p>Si pour une raison ou une autre, vous n'arrivez pas à créer le répertoire <em>input</em>, avec un message ressemblant à ceci: <code>ls: `.': No such file or directory</code>, veiller à construire l'arborescence de l'utilisateur principal (root), comme suit:</p>
+<p><code>hadoop fs -mkdir -p /user/root</code></p>
+</div>
+<ul>
+<li>Nous allons utiliser le fichier <a href="https://drive.google.com/open?id=0Bz7DokLRQvx7YnZ4NHBLX3lnOEk">purchases.txt</a> comme entrée pour le traitement MapReduce. Pour copier le fichier <em>purchases.txt</em> dans HDFS sous le répertoire <em>input</em>, télécharger ce fichier dans la machine master:<br />
+  <div class="codehilite"><pre><span></span>  wget https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases.txt
+</pre></div></li>
+<li>Charger le fichier purchases dans le répertoire input que vous avez créé:<br />
+  <div class="codehilite"><pre><span></span>  hadoop fs –put purchases.txt input
+</pre></div></li>
+<li>Pour afficher le contenu du répertoire <em>input</em>, la commande est:<br />
+  <div class="codehilite"><pre><span></span>  hadoop fs –ls input
+</pre></div></li>
+<li>Pour afficher les dernières lignes du fichier purchases:<br />
+  <div class="codehilite"><pre><span></span>  hadoop fs -tail input/purchases.txt
+</pre></div></li>
+</ul>
+<p>Le résultat suivant va donc s'afficher:<br />
+    <center><img src="../img/tp1/purchases-tail.png"></center></p>
+<p>Nous présentons dans le tableau suivant les commandes les plus utilisées pour manipuler les fichiers dans HDFS:</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Fonctionnalité</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hadoop fs –ls</code></td>
+<td>Afficher le contenu du répertoire racine</td>
+</tr>
+<tr>
+<td><code>hadoop fs –put file.txt</code></td>
+<td>Upload un fichier dans hadoop (à partir du répertoire courant linux)</td>
+</tr>
+<tr>
+<td><code>hadoop fs –get file.txt</code></td>
+<td>Download un fichier à partir de hadoop sur votre disque local</td>
+</tr>
+<tr>
+<td><code>hadoop fs –tail file.txt</code></td>
+<td>Lire les dernières lignes du fichier</td>
+</tr>
+<tr>
+<td><code>hadoop fs –cat file.txt</code></td>
+<td>Affiche tout le contenu du fichier</td>
+</tr>
+<tr>
+<td><code>hadoop fs –mv file.txt newfile.txt</code></td>
+<td>Renommer le fichier</td>
+</tr>
+<tr>
+<td><code>hadoop fs –rm newfile.txt</code></td>
+<td>Supprimer le fichier</td>
+</tr>
+<tr>
+<td><code>hadoop fs –mkdir myinput</code></td>
+<td>Créer un répertoire</td>
+</tr>
+<tr>
+<td><code>hadoop fs –cat file.txt \| less</code></td>
+<td>Lire le fichier page par page</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interfaces-web-pour-hadoop">Interfaces web pour Hadoop<a class="headerlink" href="#interfaces-web-pour-hadoop" title="Permanent link">&para;</a></h3>
+<p>Hadoop offre plusieurs interfaces web pour pouvoir observer le comportement de ses différentes composantes. Vous pouvez afficher ces pages en local sur votre machine grâce à l'option -p de la commande <code>docker run</code>. En effet, cette option permet de publier un port du contenaire sur la machine hôte. Pour pouvoir publier tous les ports exposés, vous pouvez lancer votre contenaire en utilisant l'option <code>-P</code>.</p>
+<p>En regardant le contenu du fichier <code>start-container.sh</code> fourni dans le projet, vous verrez que deux ports de la machine maître ont été exposés:</p>
+<ul>
+<li>Le port <strong>50070</strong>: qui permet d'afficher les informations de votre namenode.</li>
+<li>Le port <strong>8088</strong>: qui permet d'afficher les informations du resource manager de Yarn et visualiser le comportement des différents jobs.</li>
+</ul>
+<p>Une fois votre cluster lancé et prêt à l'emploi, vous pouvez, sur votre navigateur préféré de votre machine hôte, aller à : <code>http://localhost:50070</code>. Vous obtiendrez le résultat suivant:</p>
+<p><img alt="Namenode Info" src="../img/tp1/namenode-info.png" /></p>
+<p>Vous pouvez également visualiser l'avancement et les résultats de vos Jobs (Map Reduce ou autre) en allant à l'adresse: <code>http://localhost:8088</code></p>
+<p><img alt="Resource Manager Info" src="../img/tp1/resourceman-info.png" /></p>
+<h2 id="map-reduce">Map Reduce<a class="headerlink" href="#map-reduce" title="Permanent link">&para;</a></h2>
+<h3 id="presentation_1">Présentation<a class="headerlink" href="#presentation_1" title="Permanent link">&para;</a></h3>
+<p>Un Job Map-Reduce se compose principalement de deux types de programmes:</p>
+<ul>
+<li><strong>Mappers</strong> : permettent d’extraire les données nécessaires sous forme de clef/valeur, pour pouvoir ensuite les trier selon la clef</li>
+<li><strong>Reducers</strong> : prennent un ensemble de données triées selon leur clef, et effectuent le traitement nécessaire sur ces données (somme, moyenne, total...)</li>
+</ul>
+<h3 id="wordcount">Wordcount<a class="headerlink" href="#wordcount" title="Permanent link">&para;</a></h3>
+<p>Nous allons tester un programme MapReduce grâce à un exemple très simple, le <em>WordCount</em>, l'équivalent du <em>HelloWorld</em> pour les applications de traitement de données. Le Wordcount permet de calculer le nombre de mots dans un fichier donné, en décomposant le calcul en deux étapes:</p>
+<ul>
+<li>L'étape de <em>Mapping</em>, qui permet de découper le texte en mots et de délivrer en sortie un flux textuel, où chaque ligne contient le mot trouvé, suivi de la valeur 1 (pour dire que le mot a été trouvé une fois)</li>
+<li>L'étape de <em>Reducing</em>, qui permet de faire la somme des 1 pour chaque mot, pour trouver le nombre total d'occurrences de ce mot dans le texte.</li>
+</ul>
+<p>Commençons par créer un projet Maven dans IntelliJ IDEA. Nous utiliserons dans notre cas JDK 1.8.</p>
+<ul>
+<li>Définir les valeurs suivantes pour votre projet:<ul>
+<li><strong>GroupId</strong>: hadoop.mapreduce</li>
+<li><strong>ArtifactId</strong>: wordcount</li>
+<li><strong>Version</strong>: 1</li>
+</ul>
+</li>
+<li>Ouvrir le fichier <em>pom.xml</em>, et ajouter les dépendances suivantes pour Hadoop, HDFS et Map Reduce:</li>
+</ul>
+<div class="codehilite"><pre><span></span>  <span class="nt">&lt;dependencies&gt;</span>
+      <span class="nt">&lt;dependency&gt;</span>
+          <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
+          <span class="nt">&lt;artifactId&gt;</span>hadoop-common<span class="nt">&lt;/artifactId&gt;</span>
+          <span class="nt">&lt;version&gt;</span>2.7.2<span class="nt">&lt;/version&gt;</span>
+      <span class="nt">&lt;/dependency&gt;</span>
+      <span class="c">&lt;!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-mapreduce-client-core --&gt;</span>
+      <span class="nt">&lt;dependency&gt;</span>
+          <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
+          <span class="nt">&lt;artifactId&gt;</span>hadoop-mapreduce-client-core<span class="nt">&lt;/artifactId&gt;</span>
+          <span class="nt">&lt;version&gt;</span>2.7.2<span class="nt">&lt;/version&gt;</span>
+      <span class="nt">&lt;/dependency&gt;</span>
+      <span class="c">&lt;!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-hdfs --&gt;</span>
+      <span class="nt">&lt;dependency&gt;</span>
+          <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
+          <span class="nt">&lt;artifactId&gt;</span>hadoop-hdfs<span class="nt">&lt;/artifactId&gt;</span>
+          <span class="nt">&lt;version&gt;</span>2.7.2<span class="nt">&lt;/version&gt;</span>
+      <span class="nt">&lt;/dependency&gt;</span>
+      <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>hadoop-mapreduce-client-common<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>2.7.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+  <span class="nt">&lt;/dependencies&gt;</span>
+</pre></div>
+
+<ul>
+<li>Créer un package <em>tn.insat.tp1</em> sous le répertoire <em>src/main/java</em></li>
+<li>Créer la classe <em>TokenizerMapper</em>, contenant ce code:</li>
+</ul>
+<div class="codehilite"><pre><span></span>  <span class="kn">package</span> <span class="nn">tn.insat.tp1</span><span class="o">;</span>
+
+  <span class="kn">import</span> <span class="nn">org.apache.hadoop.io.IntWritable</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.hadoop.io.Text</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Mapper</span><span class="o">;</span>
+
+  <span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">java.util.StringTokenizer</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TokenizerMapper</span>
+        <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">IntWritable</span> <span class="n">one</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="n">Text</span> <span class="n">word</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Text</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">map</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="n">Text</span> <span class="n">value</span><span class="o">,</span> <span class="n">Mapper</span><span class="o">.</span><span class="na">Context</span> <span class="n">context</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+        <span class="n">StringTokenizer</span> <span class="n">itr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringTokenizer</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">itr</span><span class="o">.</span><span class="na">hasMoreTokens</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">word</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">itr</span><span class="o">.</span><span class="na">nextToken</span><span class="o">());</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">one</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</pre></div>
+
+<ul>
+<li>Créer la classe <em>IntSumReducer</em>:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="kn">package</span> <span class="nn">tn.insat.tp1</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.IntWritable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.Text</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Reducer</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">IntSumReducer</span>
+        <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span><span class="n">IntWritable</span><span class="o">,</span><span class="n">Text</span><span class="o">,</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">IntWritable</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span>
+                       <span class="n">Context</span> <span class="n">context</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">IntWritable</span> <span class="n">val</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;value: &quot;</span><span class="o">+</span><span class="n">val</span><span class="o">.</span><span class="na">get</span><span class="o">());</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;--&gt; Sum = &quot;</span><span class="o">+</span><span class="n">sum</span><span class="o">);</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+        <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<ul>
+<li>Enfin, créer la classe <em>WordCount</em>:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="kn">package</span> <span class="nn">tn.insat.tp1</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.Path</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.IntWritable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.Text</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Job</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.lib.input.FileInputFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.lib.output.FileOutputFormat</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCount</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+        <span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="s">&quot;word count&quot;</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setJarByClass</span><span class="o">(</span><span class="n">WordCount</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setMapperClass</span><span class="o">(</span><span class="n">TokenizerMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setCombinerClass</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setReducerClass</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setOutputKeyClass</span><span class="o">(</span><span class="n">Text</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">job</span><span class="o">.</span><span class="na">setOutputValueClass</span><span class="o">(</span><span class="n">IntWritable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">FileInputFormat</span><span class="o">.</span><span class="na">addInputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
+        <span class="n">FileOutputFormat</span><span class="o">.</span><span class="na">setOutputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">job</span><span class="o">.</span><span class="na">waitForCompletion</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h4 id="tester-map-reduce-en-local">Tester Map Reduce en local<a class="headerlink" href="#tester-map-reduce-en-local" title="Permanent link">&para;</a></h4>
+<p>Dans votre projet sur IntelliJ:</p>
+<ul>
+<li>Créer un répertoire <em>input</em> sous le répertoire <em>resources</em> de votre projet.</li>
+<li>Créer un fichier de test: <em>file.txt</em> dans lequel vous insèrerez les deux lignes:<br />
+<div class="codehilite"><pre><span></span>  Hello Wordcount!
+  Hello Hadoop!
+</pre></div></li>
+<li>Créer une configuration de type <em>Application</em> (<em>Run-&gt;Edit Configurations...-&gt;+-&gt;Application</em>).</li>
+<li>Définir comme <strong>Main Class</strong>: tn.insat.tp1.WordCount, et comme <strong>Program Arguments</strong>: <code>src/main/resources/input/file.txt src/main/resources/output</code></li>
+<li>Lancer le programme. Un répertoire <em>output</em> sera créé dans le répertoire <em>resources</em>, contenant notamment un fichier <em>part-r-00000</em>, dont le contenu devrait être le suivant:</li>
+</ul>
+<div class="codehilite"><pre><span></span>Hadoop! 1
+Hello   2
+Wordcount!  1
+</pre></div>
+
+<h4 id="lancer-map-reduce-sur-le-cluster">Lancer Map Reduce sur le cluster<a class="headerlink" href="#lancer-map-reduce-sur-le-cluster" title="Permanent link">&para;</a></h4>
+<p>Dans votre projet IntelliJ:</p>
+<ul>
+<li>Créer une configuration Maven avec la ligne de commande: <code>package install</code></li>
+<li>Lancer la configuration. Un fichier <em>wordcount-1.jar</em> sera créé dans le répertoire <em>target</em> du projet.</li>
+<li>
+<p>Copier le fichier jar créé dans le contenaire master. Pour cela:</p>
+<ul>
+<li>Ouvrir le terminal sur le répertoire du projet. Cela peut être fait avec IntelliJ en ouvrant la vue <em>Terminal</em> située en bas à gauche de la fenêtre principale.<br />
+<img alt="Terminal" src="../img/tp1/intellij-terminal.png" /></li>
+<li>Taper la commande suivante:<br />
+<div class="codehilite"><pre><span></span>  docker cp target/wordcount-1.jar hadoop-master:/root/wordcount-1.jar
+</pre></div></li>
+</ul>
+</li>
+<li>
+<p>Revenir au shell du contenaire master, et lancer le job map reduce avec cette commande:</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span>  hadoop jar wordcount-1.jar tn.insat.tp1.WordCount input output
+</pre></div>
+
+<p>Le Job sera lancé sur le fichier <em>purchases.txt</em> que vous aviez préalablement chargé dans le répertoire <em>input</em> de HDFS. Une fois le Job terminé, un répertoire <em>output</em> sera créé. Si tout se passe bien, vous obtiendrez un affichage ressemblant au suivant:<br />
+<img alt="Résultat Map Reduce" src="../img/tp1/resultat-mapreduce.png" /></p>
+<p>En affichant les dernières lignes du fichier généré <em>output/part-r-00000</em>, avec <code>hadoop fs -tail output/part-r-00000</code>, vous obtiendrez l'affichage suivant:</p>
+<p><img alt="Affichage Map Reduce" src="../img/tp1/tail.png" /></p>
+<p>Il vous est possible de monitorer vos Jobs Map Reduce, en allant à la page: <code>http://localhost:8088</code>. Vous trouverez votre Job dans la liste des applications comme suit:</p>
+<p><img alt="Job MR" src="../img/tp1/job-mr.png" /></p>
+<p>Il est également possible de voir le comportement des noeuds esclaves, en allant à l'adresse: <code>http://localhost:8041</code> pour <em>slave1</em>, et <code>http://localhost:8042</code> pour <em>slave2</em>. Vous obtiendrez ce qui suit:</p>
+<p><img alt="Job MR" src="../img/tp1/slave-mr.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">Application</p>
+<p>Écrire un Job Map Reduce permettant, à partir du fichier purchases initial, de déterminer le total des ventes par magasin. La structure du fichier purchases est de la forme suivante:<br />
+<div class="codehilite"><pre><span></span>  date   temps   magasin   produit   cout   paiement
+</pre></div><br />
+Veiller à toujours tester votre code en local avant de lancer un job sur le cluster!</p>
+</div>
+<h2 id="homework">Homework<a class="headerlink" href="#homework" title="Permanent link">&para;</a></h2>
+<p>Pour la séance prochaine, l'objectif est d'utiliser un cluster AWS-EMR (Elastic Map Reduce) de Amazon pour exécuter un Job Map Reduce de votre choix sur un vrai cluster distribué. Pour cela, utiliser les comptes <a href="https://www.rosettahub.com">RosettaHub</a> qui vous ont été fournis. </p>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href=".." title="Travaux Pratiques Big Data" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Travaux Pratiques Big Data
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../tp2/" title="TP2" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                TP2
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2017 - 2018 Lilia Sfaxi
+          </div>
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="http://liliasfaxi.wix.com/liliasfaxi" class="md-footer-social__link fa fa-globe"></a>
+    
+      <a href="https://github.com/liliasfaxi" class="md-footer-social__link fa fa-github-alt"></a>
+    
+      <a href="https://twitter.com/lillitou" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://www.linkedin.com/in/liliasfaxi/" class="md-footer-social__link fa fa-linkedin"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/raphael-min.js"></script>
+      <script src="../assets/javascripts/flowchart.js"></script>
+      <script src="../assets/javascripts/application-e3caa82af6.js"></script>
+      
+      
+      <script>app.initialize({url:{base:".."}})</script>
+      
+        <script src="../search/require.js"></script>
+      
+        <script src="../search/search.js"></script>
+      
+    
+    
+      
+      <script>!function(e,t,a,n,o,c,i){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,c=t.createElement(a),i=t.getElementsByTagName(a)[0],c.async=1,c.src=n,i.parentNode.insertBefore(c,i)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","None","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var t=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",t,e.href)})});var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})</script>
+      
+    
+  </body>
+</html>
