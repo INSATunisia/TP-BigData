@@ -72,7 +72,7 @@ markdown_extensions:
 pages:
    - 'index.md'
    - TP1: 'tp1.md'
-   #- TP2: 'tp2.md'
+   - TP2: 'tp2.md'
    #- TP3: 'tp3.md'
    #- TP4: 'tp4.md'
    #- TP5: 'tp5.md'

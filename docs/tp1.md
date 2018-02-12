@@ -34,27 +34,26 @@ Nous allons utiliser tout au long de ce TP trois contenaires représentant respe
 
 Vous devez pour cela avoir installé docker sur votre machine, et l'avoir correctement configuré. Ouvrir la ligne de commande, et taper les instructions suivantes:
 
-1. Faire un pull de l'image docker:
-``` Bash
-  sudo docker pull kiwenlau/hadoop:1.0
-```
-2. Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:
+1. Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:
 ``` Bash
   git clone https://github.com/liliasfaxi/hadoop-cluster-docker
 ```
-3. Créer le réseau Hadoop:
+2. Construire l'image Docker à partir du fichier Dockerfile fourni.
 ``` Bash
-  sudo docker network create --driver=bridge hadoop
-```
-4. Démarrer les trois contenaires:
-```Bash
   cd hadoop-cluster-docker
+  ./build-image.sh
+```
+3. Démarrer les trois contenaires:
+```Bash
   sudo ./start-container.sh
 ```
 
 !!! warning "Attention"
-    Le script _start-container.sh_ va réinitialiser les trois contenaires. Si vous voulez redémarrer un contenaire déjà créé, il ne faut pas l'exécuter de nouveau: tout sera effacé. Au lieu de cela, taper simplement (pour le master container, par exemple):
-    ``` docker exec -it hadoop-master bash ```
+    Le script _start-container.sh_ va réinitialiser les trois contenaires. Si vous voulez redémarrer un contenaire déjà créé, il ne faut pas l'exécuter de nouveau: tout sera effacé. Au lieu de cela, utiliser plutôt _docker start <container_id\>_. Pour lancer le shell, taper simplement (pour le master container, par exemple):
+
+    ```Bash
+        docker exec -it hadoop-master bash
+    ```
 
 Le résultat de cette exécution sera le suivant:
 
@@ -87,10 +86,7 @@ Toutes les commandes interagissant avec le système Hadoop commencent par hadoo
 
     ``` hadoop fs -mkdir -p /user/root```
 
-  - Nous allons utiliser le fichier [purchases.txt](https://drive.google.com/open?id=0Bz7DokLRQvx7YnZ4NHBLX3lnOEk) comme entrée pour le traitement MapReduce. Pour copier le fichier _purchases.txt_ dans HDFS sous le répertoire _input_, télécharger ce fichier dans la machine master:
-  ```bash
-    wget https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases.txt
-  ```
+  - Nous allons utiliser le fichier  [purchases.txt](https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases.txt) comme entrée pour le traitement MapReduce. Ce fichier se trouve déjà sous le répertoire principal de votre machine master.
   - Charger le fichier purchases dans le répertoire input que vous avez créé:
   ```Bash
     hadoop fs –put purchases.txt input
@@ -341,4 +337,4 @@ Il est également possible de voir le comportement des noeuds esclaves, en allan
     Veiller à toujours tester votre code en local avant de lancer un job sur le cluster!
 
 ## Homework
-Pour la séance prochaine, l'objectif est d'utiliser un cluster AWS-EMR (Elastic Map Reduce) de Amazon pour exécuter un Job Map Reduce de votre choix sur un vrai cluster distribué. Pour cela, utiliser les comptes [RosettaHub](https://www.rosettahub.com) qui vous ont été fournis. 
+Pour la séance prochaine, l'objectif est d'utiliser un cluster AWS-EMR (Elastic Map Reduce) de Amazon pour exécuter un Job Map Reduce de votre choix sur un vrai cluster distribué. Pour cela, utiliser les comptes [RosettaHub](https://www.rosettahub.com) qui vous ont été fournis.
