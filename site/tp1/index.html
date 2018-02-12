@@ -370,6 +370,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../tp2/" title="TP2" class="md-nav__link">
+      TP2
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -555,24 +567,23 @@
 <p>Nous allons utiliser tout au long de ce TP trois contenaires représentant respectivement un noeud maître (Namenode) et deux noeuds esclaves (Datanodes).</p>
 <p>Vous devez pour cela avoir installé docker sur votre machine, et l'avoir correctement configuré. Ouvrir la ligne de commande, et taper les instructions suivantes:</p>
 <ol>
-<li>Faire un pull de l'image docker:<br />
-<div class="codehilite"><pre><span></span>  sudo docker pull kiwenlau/hadoop:1.0
-</pre></div></li>
 <li>Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:<br />
 <div class="codehilite"><pre><span></span>  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
 </pre></div></li>
-<li>Créer le réseau Hadoop:<br />
-<div class="codehilite"><pre><span></span>  sudo docker network create --driver<span class="o">=</span>bridge hadoop
+<li>Construire l'image Docker à partir du fichier Dockerfile fourni.<br />
+<div class="codehilite"><pre><span></span>  <span class="nb">cd</span> hadoop-cluster-docker
+  ./build-image.sh
 </pre></div></li>
 <li>Démarrer les trois contenaires:<br />
-<div class="codehilite"><pre><span></span>  <span class="nb">cd</span> hadoop-cluster-docker
-  sudo ./start-container.sh
+<div class="codehilite"><pre><span></span>  sudo ./start-container.sh
 </pre></div></li>
 </ol>
 <div class="admonition warning">
 <p class="admonition-title">Attention</p>
-<p>Le script <em>start-container.sh</em> va réinitialiser les trois contenaires. Si vous voulez redémarrer un contenaire déjà créé, il ne faut pas l'exécuter de nouveau: tout sera effacé. Au lieu de cela, taper simplement (pour le master container, par exemple):<br />
-<code>docker exec -it hadoop-master bash</code></p>
+<p>Le script <em>start-container.sh</em> va réinitialiser les trois contenaires. Si vous voulez redémarrer un contenaire déjà créé, il ne faut pas l'exécuter de nouveau: tout sera effacé. Au lieu de cela, utiliser plutôt <em>docker start &lt;container_id></em>. Pour lancer le shell, taper simplement (pour le master container, par exemple):</p>
+<div class="codehilite"><pre><span></span>    docker <span class="nb">exec</span> -it hadoop-master bash
+</pre></div>
+
 </div>
 <p>Le résultat de cette exécution sera le suivant:</p>
 <div class="codehilite"><pre><span></span>  start hadoop-master container...
@@ -600,9 +611,7 @@
 <p><code>hadoop fs -mkdir -p /user/root</code></p>
 </div>
 <ul>
-<li>Nous allons utiliser le fichier <a href="https://drive.google.com/open?id=0Bz7DokLRQvx7YnZ4NHBLX3lnOEk">purchases.txt</a> comme entrée pour le traitement MapReduce. Pour copier le fichier <em>purchases.txt</em> dans HDFS sous le répertoire <em>input</em>, télécharger ce fichier dans la machine master:<br />
-  <div class="codehilite"><pre><span></span>  wget https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases.txt
-</pre></div></li>
+<li>Nous allons utiliser le fichier  <a href="https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases.txt">purchases.txt</a> comme entrée pour le traitement MapReduce. Ce fichier se trouve déjà sous le répertoire principal de votre machine master.</li>
 <li>Charger le fichier purchases dans le répertoire input que vous avez créé:<br />
   <div class="codehilite"><pre><span></span>  hadoop fs –put purchases.txt input
 </pre></div></li>
@@ -868,7 +877,7 @@ Wordcount!  1
 Veiller à toujours tester votre code en local avant de lancer un job sur le cluster!</p>
 </div>
 <h2 id="homework">Homework<a class="headerlink" href="#homework" title="Permanent link">&para;</a></h2>
-<p>Pour la séance prochaine, l'objectif est d'utiliser un cluster AWS-EMR (Elastic Map Reduce) de Amazon pour exécuter un Job Map Reduce de votre choix sur un vrai cluster distribué. Pour cela, utiliser les comptes <a href="https://www.rosettahub.com">RosettaHub</a> qui vous ont été fournis. </p>
+<p>Pour la séance prochaine, l'objectif est d'utiliser un cluster AWS-EMR (Elastic Map Reduce) de Amazon pour exécuter un Job Map Reduce de votre choix sur un vrai cluster distribué. Pour cela, utiliser les comptes <a href="https://www.rosettahub.com">RosettaHub</a> qui vous ont été fournis.</p>
                 
                   
                 
@@ -901,6 +910,20 @@ Veiller à toujours tester votre code en local avant de lancer un job sur le clu
             </div>
           </a>
         
+        
+          <a href="../tp2/" title="TP2" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                TP2
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
         
       </nav>
     </div>
