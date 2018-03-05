@@ -20,7 +20,8 @@ Utilisation de Spark pour réaliser des traitements par lot et des traitements e
 ### Présentation
 [Spark](https://spark.apache.org/) est un système de traitement rapide et parallèle. Il fournit des APIs de haut niveau en Java, Scala, Python et R, et un moteur optimisé qui supporte l'exécution des graphes. Il supporte également un ensemble d'outils de haut niveau tels que [Spark SQL](https://spark.apache.org/docs/latest/sql-programming-guide.html) pour le support du traitement de données structurées, [MLlib](https://spark.apache.org/docs/latest/ml-guide.html) pour l'apprentissage des données, [GraphX](https://spark.apache.org/docs/latest/graphx-programming-guide.html) pour le traitement des graphes, et [Spark Streaming](https://spark.apache.org/docs/latest/streaming-programming-guide.html) pour le traitment des données en streaming.
 
-<center><img src="../img/tp2/spark-layers.png" width="200"></center>
+<center><img src="../img/tp2/spark.png" width="200"></center>
+<center><img src="../img/tp2/spark-layers.png" width="500"></center>
 
 ### Spark et Hadoop
 Spark peut s'exécuter sur plusieurs plateformes: Hadoop, Mesos, en standalone ou sur le cloud. Il peut également accéder diverses sources de données, comme HDFS, Cassandra, HBase et S3.
@@ -472,4 +473,4 @@ Pour lancer le code précédent sur le cluster, il faudra d'abord faire des peti
 Observer le résultat.
 
 ## Homework
-Vous allez, pour ce cours, réaliser un projet en binôme, qui consiste en la construction d'une architecture Big Data supportant le streaming, le batch processing, et le dashboarding temps réel. Pour la séance prochaine, vous allez réfléchir au type de traitement que vous voulez réaliser (le flux de données en entrée, et les résultats en sortie). Vous allez commencer par utiliser Spark pour réaliser ces traitements, avec un stockage sur HDFS au besoin. 
+Vous allez, pour ce cours, réaliser un projet en binôme, qui consiste en la construction d'une architecture Big Data supportant le streaming, le batch processing, et le dashboarding temps réel. Pour la séance prochaine, vous allez réfléchir au type de traitement que vous voulez réaliser (le flux de données en entrée, et les résultats en sortie). Vous allez commencer par utiliser Spark pour réaliser ces traitements, avec un stockage sur HDFS au besoin.
