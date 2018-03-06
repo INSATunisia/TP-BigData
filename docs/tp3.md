@@ -225,7 +225,7 @@ Dans ce qui précède, nous avons configuré Kafka pour lancer un seul broker. P
        // Definir un acquittement pour les requetes du producteur
        props.put("acks", "all");
 
-       // Si la requete échoue, le producteur peut reessayer automatiquemt
+       // Si la requete echoue, le producteur peut reessayer automatiquemt
        props.put("retries", 0);
 
        // Specifier la taille du buffer size dans la config
