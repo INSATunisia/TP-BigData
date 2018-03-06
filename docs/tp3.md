@@ -350,7 +350,7 @@ Compiler le consommateur avec:
 
 Puis l'exécuter:
 ```Bash
-  java -cp "$KAFKA_HOME/libs/*":. SimpleConsumer.java Hello-Kafka
+  java -cp "$KAFKA_HOME/libs/*":. SimpleConsumer Hello-Kafka
 ```
 
 Le consommateur est maintenant à l'écoute du serveur de messagerie.
