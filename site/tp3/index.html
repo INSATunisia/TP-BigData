@@ -380,6 +380,26 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creation-dune-application-personnalisee" title="Création d'une application personnalisée" class="md-nav__link">
+    Création d'une application personnalisée
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#producteur" title="Producteur" class="md-nav__link">
+    Producteur
+  </a>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#consommateur" title="Consommateur" class="md-nav__link">
     Consommateur
@@ -569,6 +589,26 @@
           <li class="md-nav__item">
   <a href="#configuration-de-plusieurs-brokers" title="Configuration de plusieurs brokers" class="md-nav__link">
     Configuration de plusieurs brokers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creation-dune-application-personnalisee" title="Création d'une application personnalisée" class="md-nav__link">
+    Création d'une application personnalisée
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#producteur" title="Producteur" class="md-nav__link">
+    Producteur
   </a>
   
 </li>
@@ -787,11 +827,11 @@ Dans un nouveau terminal, taper la commande suivante pour créer un nouveau topi
  kafka-server-start.sh <span class="nv">$KAFKA_HOME</span>/config/server-two.properties <span class="p">&amp;</span>
 </pre></div>
 
-<p>Lancer <code>jps</code>pour voir les trois serveurs s'exécuter.</p>
-<p>## Création d'une application personnalisée<br />
- Nous allons dans cette partie créer une application pour publier et consommer des messages de Kafka. Pour cela, nous allons utiliser KafkaProducer API et KafkaConsumer API.</p>
-<p>### Producteur<br />
- Pour créer un producteur Kafka, créer un fichier dans un répertoire de votre choix dans le contenaire master, intitulé <code>SimpleProducer.java</code>. Son code est le suivant:</p>
+<p>Lancer <code>jps</code> pour voir les trois serveurs s'exécuter.</p>
+<h2 id="creation-dune-application-personnalisee">Création d'une application personnalisée<a class="headerlink" href="#creation-dune-application-personnalisee" title="Permanent link">&para;</a></h2>
+<p>Nous allons dans cette partie créer une application pour publier et consommer des messages de Kafka. Pour cela, nous allons utiliser KafkaProducer API et KafkaConsumer API.</p>
+<h3 id="producteur">Producteur<a class="headerlink" href="#producteur" title="Permanent link">&para;</a></h3>
+<p>Pour créer un producteur Kafka, créer un fichier dans un répertoire de votre choix dans le contenaire master, intitulé <code>SimpleProducer.java</code>. Son code est le suivant:</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">java.util.Properties</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.kafka.clients.producer.Producer</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.kafka.clients.producer.KafkaProducer</span><span class="o">;</span>
@@ -819,7 +859,7 @@ Dans un nouveau terminal, taper la commande suivante pour créer un nouveau topi
       <span class="c1">// Definir un acquittement pour les requetes du producteur</span>
       <span class="n">props</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;acks&quot;</span><span class="o">,</span> <span class="s">&quot;all&quot;</span><span class="o">);</span>
 
-      <span class="c1">// Si la requete échoue, le producteur peut reessayer automatiquemt</span>
+      <span class="c1">// Si la requete echoue, le producteur peut reessayer automatiquemt</span>
       <span class="n">props</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;retries&quot;</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
 
       <span class="c1">// Specifier la taille du buffer size dans la config</span>

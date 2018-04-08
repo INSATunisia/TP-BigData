@@ -189,12 +189,14 @@ Dans ce qui précède, nous avons configuré Kafka pour lancer un seul broker. P
   kafka-server-start.sh $KAFKA_HOME/config/server-two.properties &
  ```
 
- Lancer ```jps```pour voir les trois serveurs s'exécuter.
+ Lancer ```jps``` pour voir les trois serveurs s'exécuter.
 
- ## Création d'une application personnalisée
+## Création d'une application personnalisée
+
  Nous allons dans cette partie créer une application pour publier et consommer des messages de Kafka. Pour cela, nous allons utiliser KafkaProducer API et KafkaConsumer API.
 
- ### Producteur
+### Producteur
+
  Pour créer un producteur Kafka, créer un fichier dans un répertoire de votre choix dans le contenaire master, intitulé ```SimpleProducer.java```. Son code est le suivant:
 
  ```Java
