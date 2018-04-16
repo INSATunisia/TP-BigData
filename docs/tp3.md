@@ -1,4 +1,4 @@
-# TP3 - La Collecte de données avec le Bus Kafka
+# TP3 - La Collecte de Données avec le Bus Kafka
 
 <center>![Distributed Data Collection](img/collect.png)</center>
 
