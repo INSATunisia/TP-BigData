@@ -15,7 +15,7 @@
 
 ## Overview
 
-L'objectif de ce cours est d'initier les étudiants aux architectures Big Data: Les notions, technologies, patrons et bonnes pratiques.
+Vous trouverez sur mon [site officiel](http://liliasfaxi.wixsite.com/liliasfaxi/big-data) le cours Big Data associé à ces TPs. L'objectif de ce cours est d'initier les étudiants aux architectures Big Data: Les notions, technologies, patrons et bonnes pratiques.
 Le cours comportera les chapitres suivants:
 
 * Introduction au Big Data
@@ -26,4 +26,7 @@ Le cours comportera les chapitres suivants:
 
 Ce cours comporte cinq séances de travaux pratiques:
 
-* _TBD_
+* [TP1](tp1/index.html): Hadoop et Map Reduce
+* [TP2](tp2/index.html): Apache Spark
+* [TP3](tp3/index.html): Apache Kafka
+* [TP4](tp4/index.html): HBase
