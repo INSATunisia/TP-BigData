@@ -83,6 +83,11 @@ Charger ensuite ce fichier dans HDFS:
   hadoop fs -put file1.txt
 ```
 
+!!! error
+      Si le message suivant s'affiche: ```put: `.': No such file or directory```, c'est parce que l'arborescence du répertoire principal n'est pas créée dans HDFS. Pour le faire, il suffit d'exécuter la commande suivante avant la commande de chargement :
+      ```hadoop fs mkdir -p . ```
+
+
 Pour vérifier que spark est bien installé, taper la commande suivante:
 ```Bash
   spark-shell
@@ -119,9 +124,9 @@ A un haut niveau d'abstraction, chaque application Spark consiste en un programm
 Les RDDs supportent deux types d'opérations:
 
   * les _transformations_, qui permettent de créer un nouveau Dataset à partir d'un Dataset existant
-  * les _actions_, qui retournent une valeur au programme _driver_ arès avoir exécuté un calcul sur le Dataset.
+  * les _actions_, qui retournent une valeur au programme _driver_ après avoir exécuté un calcul sur le Dataset.
 
-Par exemple, un _map_ est une transformation qui passe chaque élément du dataset via une fontion, et retourne un nouvel RDD représentant les résultats. Un _reduce_ est une action qui agrège tous les éléments du RDD en utilisant une certaine fonction et retourne le résultat final au programme.
+Par exemple, un _map_ est une transformation qui passe chaque élément du dataset via une fonction, et retourne un nouvel RDD représentant les résultats. Un _reduce_ est une action qui agrège tous les éléments du RDD en utilisant une certaine fonction et retourne le résultat final au programme.
 
 Toutes les transformations dans Spark sont _lazy_, car elles ne calculent pas le résultat immédiatement. Elles se souviennent des transformations appliquées à un dataset de base (par ex. un fichier). Les transformations ne sont calculées que quand une action nécessite qu'un résultat soit retourné au programme principal. Cela permet à Spark de s'exécuter plus efficacement.
 
@@ -203,8 +208,19 @@ Nous allons dans cette partie créer un projet Spark Batch en Java (un simple Wo
     </dependencies>
   ```
   3. Sous le répertoire java, créer un package que vous appellerez _tn.insat.tp21_, et dedans, une classe appelée _WordCountTask_.
-  4. Écrire le code suivant dans _WordCountTask_:
+  4. Écrire le code suivant dans _WordCountTask_ (N'oubliez pas de rajouter les imports nécessaires!):
   ```java
+  import org.apache.spark.SparkConf;
+  import org.apache.spark.api.java.JavaPairRDD;
+  import org.apache.spark.api.java.JavaRDD;
+  import org.apache.spark.api.java.JavaSparkContext;
+  import org.slf4j.Logger;
+  import org.slf4j.LoggerFactory;
+  import scala.Tuple2;
+
+  import java.util.Arrays;
+
+  import static jersey.repackaged.com.google.common.base.Preconditions.checkArgument;
   public class WordCountTask {
         private static final Logger LOGGER = LoggerFactory.getLogger(WordCountTask.class);
 
@@ -285,7 +301,7 @@ Lancer ensuite une configuration de type Maven, avec les commandes _package inst
 Nous allons maintenant copier ce fichier dans docker. Pour cela, naviguer vers le répertoire du projet avec votre terminal (ou plus simplement utiliser le terminal dans IntelliJ), et taper la commande suivante:
 
 ```Bash
-  docker cp target/wordcount-1 hadoop-master:/root/wordcount-1.jar
+  docker cp target/wordcount-1.jar hadoop-master:/root/wordcount-1.jar
 ```
 
 Revenir à votre contenaire master, et lancer un job Spark en utilisant ce fichier jar généré, avec la commande ```spark-submit```, un script utilisé pour lancer des applications spark sur un cluster.
@@ -294,7 +310,7 @@ Revenir à votre contenaire master, et lancer un job Spark en utilisant ce fichi
   spark-submit  --class tn.insat.tp21.WordCountTask
                 --master local
                 --driver-memory 4g --executor-memory 2g --executor-cores 1
-                wordcount.jar
+                wordcount-1.jar
                 input/purchases.txt
                 output
 ```
@@ -303,26 +319,31 @@ Revenir à votre contenaire master, et lancer un job Spark en utilisant ce fichi
   * Le fichier en entrée est le fichier purchases.txt (que vous trouverez déjà chargé sur le contenaire master), et le résultat sera stocké dans un répertoire _output_.
 
 !!!warning "Attention"
-      Vérifiez bien que le fichier _purchases_ existe dans le répertoire input de HDFS, et que le répertoire _output_ n'existe pas!
+      Vérifiez bien que le fichier _purchases_ existe dans le répertoire input de HDFS (et que le répertoire _output_ n'existe pas)!
+      Si ce n'est pas le cas, vous pouvez le charger avec les commandes suivantes:
+      ```
+        hadoop fs -mkdir -p input
+        hadoop fs -put purchases input
+      ```
 
 Si tout se passe bien, vous devriez trouver, dans le répertoire _output_, deux fichiers part-00000 et part-00001, qui ressemblent à ce qui suit:
 
 <center><img src="../img/tp2/output-batch.png" width="300"></center>
 
 Nous allons maintenant tester le comportement de _spark-submit_ si on l'exécute en mode _cluster_ sur YARN. Pour cela, exécuter le code suivant:
-```Bash
+```Bash hl_lines="2 3"
   spark-submit  --class tn.insat.tp21.WordCountTask
                 --master yarn
                 --deploy-mode cluster
                 --driver-memory 4g --executor-memory 2g --executor-cores 1
-                wordcount.jar
+                wordcount-1.jar
                 input/purchases.txt
                 output2
 ```
 
   * En lançant le job sur Yarn, deux modes de déploiement sont possibles:
-    - Mode cluster: où tout le job s'exécute dans le cluster, c'est à dire les Spark Executors (qui exécutent les vraies tâches) et le Spark Driver (qui ordonnance les Executors). Ce dernier sera encapsulé dans un YARN Application Master.
-    - Mode client : où Spark Driver s'exécute sur la machine cliente (tel que votre propre ordinateur portable). Si votre machine s'éteint, le job s'arrête. Ce mode est approprié pour les jobs interactifs.
+    - **Mode cluster**: où tout le job s'exécute dans le cluster, c'est à dire les Spark Executors (qui exécutent les vraies tâches) et le Spark Driver (qui ordonnance les Executors). Ce dernier sera encapsulé dans un YARN Application Master.
+    - **Mode client** : où Spark Driver s'exécute sur la machine cliente (tel que votre propre ordinateur portable). Si votre machine s'éteint, le job s'arrête. Ce mode est approprié pour les jobs interactifs.
 
 Si tout se passe bien, vous devriez obtenir un répertoire output2 dans HDFS avec les fichiers usuels.
 
@@ -331,11 +352,11 @@ Si tout se passe bien, vous devriez obtenir un répertoire output2 dans HDFS ave
 
 ## Spark Streaming
 
-Spark est connu pour supporter également le traitement des données en streaming. Les données peuvent être lues à partir de plusieurs sources tel que Kafka, Flume, Kinesis ou des sockets TCP, et peuvent être traitées en utilisant des algorithmes complexes. Ensuite, les données traitées peuvent être stockées sur des systèmes de fichiers, des bases de données ou des dashboards. Il est même possible de réaliser des algorithmes de machine learning et du traitement de graphes sur les flux de données.
+Spark est connu pour supporter également le traitement des données en streaming. Les données peuvent être lues à partir de plusieurs sources tel que Kafka, Flume, Kinesis ou des sockets TCP, et peuvent être traitées en utilisant des algorithmes complexes. Ensuite, les données traitées peuvent être stockées sur des systèmes de fichiers, des bases de données ou des dashboards. Il est même possible de réaliser des algorithmes de machine learning et de traitement de graphes sur les flux de données.
 
 <center><img src="../img/tp2/streaming.png" width="400"></center>
 
-En interne, il fonctionne comme suit. Spark Streaming reçoit des données en streaming et les divise en micro-batches, qui sont ensuite calculés par le moteur de spark pour générer le flux final de résultats.
+En interne, il fonctionne comme suit: Spark Streaming reçoit des données en streaming et les divise en micro-batches, qui sont ensuite calculés par le moteur de spark pour générer le flux final de résultats.
 
 <center><img src="../img/tp2/micro-batch.png" width="500"></center>
 
@@ -385,7 +406,17 @@ Nous allons commencer par tester le streaming en local, comme d'habitude. Pour c
   2. Créer une classe _tn.insat.tp22.Stream_ avec le code suivant:
 
   ```java
-      public class Stream {
+  import org.apache.spark.SparkConf;
+  import org.apache.spark.streaming.Durations;
+  import org.apache.spark.streaming.api.java.JavaDStream;
+  import org.apache.spark.streaming.api.java.JavaPairDStream;
+  import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
+  import org.apache.spark.streaming.api.java.JavaStreamingContext;
+  import scala.Tuple2;
+
+  import java.util.Arrays;
+
+    public class Stream {
       public static void main(String[] args) throws InterruptedException {
           SparkConf conf = new SparkConf()
               .setAppName("NetworkWordCount")
@@ -415,12 +446,13 @@ Nous allons commencer par tester le streaming en local, comme d'habitude. Pour c
 ### Test du code en Local
   Le stream ici sera diffusé par une petite commande utilitaire qui se trouve dans la majorité des systèmes Unix-like.
 
-  * Ouvrir un terminal, et taper la commande suivante pour créer le stream:
-  ```Bash
-    nc -lk 9999
-  ```
-  Vous pourrez alors taper les entrées de votre choix.
+
   * Exécuter votre classe _Stream_. Vous verrez défiler sur votre console des lignes en continu: l'application est en écoute sur localhost:9999.
+  * Ouvrir un terminal, et taper la commande suivante pour créer le stream:
+    ```Bash
+      nc -lk 9999
+    ```
+    Vous pourrez alors taper les entrées de votre choix.
 
 A chaque fois que vous entrez quelque chose sur le terminal, l'application l'intercepte, et l'affichage sur l'écran de la console change, comme suit:
 
