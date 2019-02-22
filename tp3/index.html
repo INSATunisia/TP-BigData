@@ -751,7 +751,7 @@
 <center><br />
 <img alt="Architecture Kafka" src="../img/tp3/archi.jpg" /><br />
 </center></p>
-<p>Dans cet exemple, un topic est configuré en trois partitions. La partition 1 admet deux enregistrements d'offsets respectifs 0 et 1, la partition 2 a quatre enregistrements et la partition 3 a un seul enregistrement.</p>
+<p>Dans cet exemple, un topic est configuré en trois partitions.</p>
 <p>En supposant que, si le facteur de réplication du topic est de 3, alors Kafka va créer trois répliques identiques de chaque partition et les placer dans le cluster pour les rendre disponibles pour toutes les opérations. L'identifiant de la réplique est le même que l'identifiant du serveur qui l'héberge. Pour équilibrer la charge dans le cluster, chaque broker stocke une ou plusieurs de ces partitions. Plusieurs producteurs et consommateurs peuvent publier et extraire les messages au même moment.</p>
 <h3 id="kafka-et-zookeeper">Kafka et Zookeeper<a class="headerlink" href="#kafka-et-zookeeper" title="Permanent link">&para;</a></h3>
 <p><a href="https://zookeeper.apache.org/">Zookeeper</a> est un service centralisé permettant de maintenir l'information de configuration, de nommage, de synchronisation et de services de groupe. Ces services sont utilisés par les applications distribuées en général, et par Kafka en particulier. Pour éviter la complexité et difficulté de leur implémentation manuelle, Zookeeper est utilisé.</p>
