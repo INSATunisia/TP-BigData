@@ -73,7 +73,7 @@ La figure suivante montre un exemple de flux entre les différentes parties d'un
 ![Architecture Kafka](img/tp3/archi.jpg)
 </center>
 
-Dans cet exemple, un topic est configuré en trois partitions. La partition 1 admet deux enregistrements d'offsets respectifs 0 et 1, la partition 2 a quatre enregistrements et la partition 3 a un seul enregistrement.
+Dans cet exemple, un topic est configuré en trois partitions.
 
 En supposant que, si le facteur de réplication du topic est de 3, alors Kafka va créer trois répliques identiques de chaque partition et les placer dans le cluster pour les rendre disponibles pour toutes les opérations. L'identifiant de la réplique est le même que l'identifiant du serveur qui l'héberge. Pour équilibrer la charge dans le cluster, chaque broker stocke une ou plusieurs de ces partitions. Plusieurs producteurs et consommateurs peuvent publier et extraire les messages au même moment.
 
