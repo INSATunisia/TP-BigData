@@ -391,6 +391,7 @@ Nous allons réaliser un traitement simple pour montrer comment greffer spark su
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase</artifactId>
             <version>2.1.3</version>
+            <type>pom</type>
         </dependency>
 
         <dependency>
