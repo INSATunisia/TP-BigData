@@ -9,7 +9,7 @@
 Manipulation de données avec HBase, et traitement co-localisé avec Spark.
 
 ## Outils et Versions
-* [Apache HBase](https://hbase.apache.org/) Version 1.4.7 
+* [Apache HBase](https://hbase.apache.org/) Version 1.4.7
 * [Apache Hadoop](http://hadoop.apache.org/) Version: 2.7.2
 * [Apache Spark](https://spark.apache.org/) Version: 2.2.1
 * [Docker](https://www.docker.com/) Version 17.09.1
@@ -386,6 +386,13 @@ Nous allons réaliser un traitement simple pour montrer comment greffer spark su
     </build>
 
     <dependencies>
+
+      <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase</artifactId>
+            <version>2.1.3</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-spark</artifactId>
