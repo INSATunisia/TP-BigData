@@ -247,7 +247,7 @@ Nous allons dans cette partie créer un projet Spark Batch en Java (un simple Wo
   ```
   La première chose à faire dans un programme Spark est de créer un objet _JavaSparkContext_, qui indique à Spark comment accéder à un cluster. Pour créer ce contexte, vous aurez besoin de construire un objet _SparkConf_ qui contient toutes les informations sur l'application.
 
-    * _appName_: est de nom de l'application
+    * _appName_ est le nom de l'application
     * _master_ est une URL d'un cluster Spark, Mesos ou YARN, ou bien une chaîne spéciale _local_ pour lancer le job en mode local.
 
 !!! warning
@@ -420,7 +420,7 @@ Nous allons commencer par tester le streaming en local, comme d'habitude. Pour c
       public static void main(String[] args) throws InterruptedException {
           SparkConf conf = new SparkConf()
               .setAppName("NetworkWordCount")
-              .setMaster("local");
+              .setMaster("local[*]");
           JavaStreamingContext jssc =
               new JavaStreamingContext(conf, Durations.seconds(1));
 
