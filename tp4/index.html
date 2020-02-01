@@ -587,31 +587,20 @@ Il permet un accès aléatoire en écriture/lecture en temps réel à un très g
 <p>Le HBase Master est responsable de coordonner les <em>region servers</em> en assignant les régions au démarrage, les réassignant en cas de récupération ou d'équilibrage de charge, et en faisant le monitoring des instances des <em>region servers</em> dans le cluster. Il permet également de fournir une interface pour la création, la suppression et la modification des tables.</p>
 <p>HBase utilise Zookeeper comme service de coordination pour maintenir l'état du serveur dans le cluster. Zookeeper sait quels serveurs sont actifs et disponibles, et fournit une notification en cas d'échec d'un serveur.</p>
 <h3 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
-<p>HBase est installé sur le même cluster que précédemment.  Si vous disposez des contenaires, vous n'avez rien à faire. Sinon, vous pourrez les installer avec Docker comme suit:</p>
-<ol>
-<li>Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:<br />
-<div class="codehilite"><pre><span></span>  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
-</pre></div></li>
-<li>Construire l'image Docker à partir du fichier Dockerfile fourni.<br />
-<div class="codehilite"><pre><span></span>  <span class="nb">cd</span> hadoop-cluster-docker
-  ./build-image.sh
-</pre></div></li>
-<li>Démarrer les trois contenaires:<br />
-<div class="codehilite"><pre><span></span>  sudo ./start-container.sh
-</pre></div><br />
-Le résultat de cette exécution sera le suivant:<br />
-<div class="codehilite"><pre><span></span>  start hadoop-master container...
-  start hadoop-slave1 container...
-  start hadoop-slave2 container...
-  root@hadoop-master:~#
-</pre></div></li>
-<li>Lancer Hadoop en tapant :<br />
+<p>HBase est installé sur le même cluster que précédemment. Suivre les étapes décrites dans la partie <em>Installation</em> du <a href="../tp1/index.html#installation">TP1</a> pour télécharger l'image et exécuter les trois contenaires. Si cela est déjà fait, il suffit de lancer vos machines grâce aux commandes suivantes:</p>
+<div class="codehilite"><pre><span></span>  docker start hadoop-master hadoop-slave1 hadoop-slave2
+</pre></div>
+
+<p>puis d'entrer dans le contenaire master:</p>
+<div class="codehilite"><pre><span></span>    docker <span class="nb">exec</span> -it hadoop-master bash
+</pre></div>
+
+<p>Lancer ensuite les démons yarn et hdfs:<br />
 <div class="codehilite"><pre><span></span>  ./start-hadoop.sh
-</pre></div></li>
-<li>Lancer HBase en tapant :<br />
+</pre></div></p>
+<p>Lancer HBase en tapant :<br />
 <div class="codehilite"><pre><span></span>  start-hbase.sh
-</pre></div></li>
-</ol>
+</pre></div></p>
 <p>Une fois c'est fait, en tapant <code>jps</code>, vous devriez avoir un résultat ressemblant au suivant:</p>
 <p><div class="codehilite"><pre><span></span><span class="m">161</span> NameNode
 <span class="m">1138</span> HRegionServer

@@ -658,28 +658,17 @@
 <p>Spark peut s'exécuter sur plusieurs plateformes: Hadoop, Mesos, en standalone ou sur le cloud. Il peut également accéder diverses sources de données, comme HDFS, Cassandra, HBase et S3.</p>
 <p>Dans ce TP, nous allons exécuter Spark sur Hadoop YARN. YARN s'occupera ainsi de la gestion des ressources pour le déclenchement et l'exécution des Jobs Spark.</p>
 <h3 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
-<p>Nous avons procédé à l'installation de Spark sur le cluster Hadoop utilisé dans le <a href="../tp1/index.html">TP1</a>. Voici les étapes nécessaires pour le lancer:</p>
-<ol>
-<li>Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:<br />
-<div class="codehilite"><pre><span></span>  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
-</pre></div></li>
-<li>Construire l'image Docker à partir du fichier Dockerfile fourni.<br />
-<div class="codehilite"><pre><span></span>  <span class="nb">cd</span> hadoop-cluster-docker
-  ./build-image.sh
-</pre></div></li>
-<li>Démarrer les trois contenaires:<br />
-<div class="codehilite"><pre><span></span>  sudo ./start-container.sh
-</pre></div><br />
-Le résultat de cette exécution sera le suivant:<br />
-<div class="codehilite"><pre><span></span>  start hadoop-master container...
-  start hadoop-slave1 container...
-  start hadoop-slave2 container...
-  root@hadoop-master:~#
-</pre></div></li>
-<li>Lancer les démons yarn et hdfs en lançant:<br />
+<p>Nous avons procédé à l'installation de Spark sur le cluster Hadoop utilisé dans le <a href="../tp1/index.html">TP1</a>. Suivre les étapes décrites dans la partie <em>Installation</em> du <a href="../tp1/index.html#installation">TP1</a> pour télécharger l'image et exécuter les trois contenaires. Si cela est déjà fait, il suffit de lancer vos machines grâce aux commandes suivantes:</p>
+<div class="codehilite"><pre><span></span>  docker start hadoop-master hadoop-slave1 hadoop-slave2
+</pre></div>
+
+<p>puis d'entrer dans le contenaire master:</p>
+<div class="codehilite"><pre><span></span>    docker <span class="nb">exec</span> -it hadoop-master bash
+</pre></div>
+
+<p>Lancer ensuite les démons yarn et hdfs:<br />
 <div class="codehilite"><pre><span></span>  ./start-hadoop.sh
-</pre></div></li>
-</ol>
+</pre></div></p>
 <p>Vous pourrez vérifier que tous les démons sont lancés en tapant: <code>jps</code>. Un résultat semblable au suivant pourra être visible:<br />
 <div class="codehilite"><pre><span></span>  <span class="m">880</span> Jps
   <span class="m">257</span> NameNode

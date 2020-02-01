@@ -591,29 +591,35 @@
 <p>Nous allons utiliser tout au long de ce TP trois contenaires représentant respectivement un noeud maître (Namenode) et deux noeuds esclaves (Datanodes).</p>
 <p>Vous devez pour cela avoir installé docker sur votre machine, et l'avoir correctement configuré. Ouvrir la ligne de commande, et taper les instructions suivantes:</p>
 <ol>
-<li>Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:<br />
-<div class="codehilite"><pre><span></span>  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
+<li>Télécharger l'image docker uploadée sur dockerhub:<br />
+<div class="codehilite"><pre><span></span>  docker pull liliasfaxi/spark-hadoop:hv-2.7.2
 </pre></div></li>
-<li>Construire l'image Docker à partir du fichier Dockerfile fourni.<br />
-<div class="codehilite"><pre><span></span>  <span class="nb">cd</span> hadoop-cluster-docker
-  ./build-image.sh
+<li>Créer les trois contenaires à partir de l'image téléchargée. Pour cela:<br />
+   2.1. Créer un réseau qui permettra de relier les trois contenaires:<br />
+    <div class="codehilite"><pre><span></span>  docker network create --driver<span class="o">=</span>bridge hadoop
+</pre></div><br />
+    2.2. Créer et lancer les trois contenaires (les instructions -p permettent de faire un mapping entre les ports de la machine hôte et ceux du contenaire):<br />
+    <div class="codehilite"><pre><span></span>  docker run -itd --net<span class="o">=</span>hadoop -p <span class="m">50070</span>:50070 -p <span class="m">8088</span>:8088 -p <span class="m">7077</span>:7077 -p <span class="m">16010</span>:16010 <span class="se">\</span>
+            --name hadoop-master --hostname hadoop-master <span class="se">\</span>
+            liliasfaxi/spark-hadoop:hv-2.7.2
+
+  docker run -itd -p <span class="m">8040</span>:8042 --net<span class="o">=</span>hadoop <span class="se">\</span>
+        --name hadoop-slave1 --hostname hadoop-slave1 <span class="se">\</span>
+              liliasfaxi/spark-hadoop:hv-2.7.2
+
+  docker run -itd -p <span class="m">8041</span>:8042 --net<span class="o">=</span>hadoop <span class="se">\</span>
+        --name hadoop-slave2 --hostname hadoop-slave2 <span class="se">\</span>
+              liliasfaxi/spark-hadoop:hv-2.7.2
 </pre></div></li>
-<li>Démarrer les trois contenaires:<br />
-<div class="codehilite"><pre><span></span>  sudo ./start-container.sh
-</pre></div></li>
-</ol>
-<div class="admonition warning">
-<p class="admonition-title">Attention</p>
-<p>Le script <em>start-container.sh</em> va réinitialiser les trois contenaires. Si vous voulez redémarrer un contenaire déjà créé, il ne faut pas l'exécuter de nouveau: tout sera effacé. Au lieu de cela, utiliser plutôt <em>docker start &lt;container_id></em>. Pour lancer le shell, taper simplement (pour le master container, par exemple):</p>
+<li>
+<p>Entrer dans le contenaire master pour commencer à l'utiliser.</p>
 <div class="codehilite"><pre><span></span>    docker <span class="nb">exec</span> -it hadoop-master bash
 </pre></div>
 
-</div>
+</li>
+</ol>
 <p>Le résultat de cette exécution sera le suivant:</p>
-<div class="codehilite"><pre><span></span>  start hadoop-master container...
-  start hadoop-slave1 container...
-  start hadoop-slave2 container...
-  root@hadoop-master:~#
+<div class="codehilite"><pre><span></span>  root@hadoop-master:~#
 </pre></div>
 
 <p>Vous vous retrouverez dans le shell du namenode, et vous pourrez ainsi manipuler le cluster à votre guise. La première chose à faire, une fois dans le contenaire, est de lancer hadoop et yarn. Un script est fourni pour cela, appelé <em>start-hadoop.sh</em>. Lancer ce script.</p>

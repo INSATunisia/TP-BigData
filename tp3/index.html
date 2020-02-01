@@ -759,33 +759,25 @@
 <p>Un cluster Kafka consiste typiquement en plusieurs courtiers (Brokers) pour maintenir la répartition de charge. Ces courtiers sont stateless, c'est pour cela qu'ils utilisent Zookeeper pour maintenir l'état du cluster. Un courtier peut gérer des centaines de milliers de lectures et écritures par seconde, et chaque courtier peut gérer des téra-octets de messages sans impact sur la performance.</p>
 <p>Zookeeper est utilisé pour gérer et coordonner les courtiers Kafka. Il permet de notifier les producteurs et consommateurs de messages de la présence de tout nouveau courtier, ou de l'échec d'un courtier dans le cluster.</p>
 <h3 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
-<p>Kafka a été installé sur le même cluster que les deux TP précédents. Si vous disposez des contenaires, vous n'avez rien à faire. Sinon, vous pourrez les installer avec Docker comme suit:</p>
-<ol>
-<li>Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:<br />
-<div class="codehilite"><pre><span></span>  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
-</pre></div></li>
-<li>Construire l'image Docker à partir du fichier Dockerfile fourni.<br />
-<div class="codehilite"><pre><span></span>  <span class="nb">cd</span> hadoop-cluster-docker
-  ./build-image.sh
-</pre></div></li>
-<li>Démarrer les trois contenaires:<br />
-<div class="codehilite"><pre><span></span>  sudo ./start-container.sh
-</pre></div><br />
-Le résultat de cette exécution sera le suivant:<br />
-<div class="codehilite"><pre><span></span>  start hadoop-master container...
-  start hadoop-slave1 container...
-  start hadoop-slave2 container...
-  root@hadoop-master:~#
-</pre></div></li>
-<li>Lancer Kafka et Zookeeper en tapant :<br />
+<p>Kafka a été installé sur le même cluster que les deux TP précédents. Suivre les étapes décrites dans la partie <em>Installation</em> du <a href="../tp1/index.html#installation">TP1</a> pour télécharger l'image et exécuter les trois contenaires. Si cela est déjà fait, il suffit de lancer vos machines grâce aux commandes suivantes:</p>
+<div class="codehilite"><pre><span></span>  docker start hadoop-master hadoop-slave1 hadoop-slave2
+</pre></div>
+
+<p>puis d'entrer dans le contenaire master:</p>
+<div class="codehilite"><pre><span></span>    docker <span class="nb">exec</span> -it hadoop-master bash
+</pre></div>
+
+<p>Lancer ensuite les démons yarn et hdfs:<br />
+<div class="codehilite"><pre><span></span>  ./start-hadoop.sh
+</pre></div></p>
+<p>Lancer Kafka et Zookeeper en tapant :<br />
 <div class="codehilite"><pre><span></span>  ./start-kafka-zookeeper.sh
 </pre></div><br />
 Les deux démons Kafka et Zookeeper seront lancés. Vous pourrez vérifier cela en tapant <code>jps</code> pour voir quels processus Java sont en exécution, vous devriez trouver les processus suivants:<br />
 <div class="codehilite"><pre><span></span>  <span class="m">2756</span> Kafka
   <span class="m">53</span> QuorumPeerMain
   <span class="m">6349</span> Jps
-</pre></div></li>
-</ol>
+</pre></div></p>
 <h2 id="premiere-utilisation-de-kafka">Première utilisation de Kafka<a class="headerlink" href="#premiere-utilisation-de-kafka" title="Permanent link">&para;</a></h2>
 <h3 id="creation-dun-topic">Création d'un topic<a class="headerlink" href="#creation-dun-topic" title="Permanent link">&para;</a></h3>
 <p>Pour gérer les topics, Kafka fournit une commande appelée <code>kafka-topics.sh</code>.<br />
