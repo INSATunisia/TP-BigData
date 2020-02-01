@@ -830,7 +830,7 @@ Le contenu des deux fichiers <em>part-00000</em> et <em>part-00001</em> ressembl
 </pre></div><br />
   La première chose à faire dans un programme Spark est de créer un objet <em>JavaSparkContext</em>, qui indique à Spark comment accéder à un cluster. Pour créer ce contexte, vous aurez besoin de construire un objet <em>SparkConf</em> qui contient toutes les informations sur l'application.</p>
 <ul>
-<li><em>appName</em>: est de nom de l'application</li>
+<li><em>appName</em> est le nom de l'application</li>
 <li><em>master</em> est une URL d'un cluster Spark, Mesos ou YARN, ou bien une chaîne spéciale <em>local</em> pour lancer le job en mode local.</li>
 </ul>
 </li>
@@ -989,7 +989,7 @@ Le contenu des deux fichiers <em>part-00000</em> et <em>part-00001</em> ressembl
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
         <span class="n">SparkConf</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SparkConf</span><span class="o">()</span>
             <span class="o">.</span><span class="na">setAppName</span><span class="o">(</span><span class="s">&quot;NetworkWordCount&quot;</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">setMaster</span><span class="o">(</span><span class="s">&quot;local&quot;</span><span class="o">);</span>
+            <span class="o">.</span><span class="na">setMaster</span><span class="o">(</span><span class="s">&quot;local[*]&quot;</span><span class="o">);</span>
         <span class="n">JavaStreamingContext</span> <span class="n">jssc</span> <span class="o">=</span>
             <span class="k">new</span> <span class="n">JavaStreamingContext</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="n">Durations</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
 

@@ -75,33 +75,24 @@ Le HBase Master est responsable de coordonner les _region servers_ en assignant 
 HBase utilise Zookeeper comme service de coordination pour maintenir l'état du serveur dans le cluster. Zookeeper sait quels serveurs sont actifs et disponibles, et fournit une notification en cas d'échec d'un serveur.
 
 ### Installation
-HBase est installé sur le même cluster que précédemment.  Si vous disposez des contenaires, vous n'avez rien à faire. Sinon, vous pourrez les installer avec Docker comme suit:
+HBase est installé sur le même cluster que précédemment. Suivre les étapes décrites dans la partie _Installation_ du [TP1](tp1/index.html#installation) pour télécharger l'image et exécuter les trois contenaires. Si cela est déjà fait, il suffit de lancer vos machines grâce aux commandes suivantes:
 
-1. Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:
-``` Bash
-  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
-```
-2. Construire l'image Docker à partir du fichier Dockerfile fourni.
-``` Bash
-  cd hadoop-cluster-docker
-  ./build-image.sh
-```
-3. Démarrer les trois contenaires:
 ```Bash
-  sudo ./start-container.sh
+  docker start hadoop-master hadoop-slave1 hadoop-slave2
 ```
-Le résultat de cette exécution sera le suivant:
+
+puis d'entrer dans le contenaire master:
+
 ```Bash
-  start hadoop-master container...
-  start hadoop-slave1 container...
-  start hadoop-slave2 container...
-  root@hadoop-master:~#
+    docker exec -it hadoop-master bash
 ```
-4. Lancer Hadoop en tapant :
+
+Lancer ensuite les démons yarn et hdfs:
 ```Bash
   ./start-hadoop.sh
 ```
-5. Lancer HBase en tapant :
+
+Lancer HBase en tapant :
 ```Bash
   start-hbase.sh
 ```

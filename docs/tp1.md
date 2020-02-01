@@ -34,22 +34,30 @@ Nous allons utiliser tout au long de ce TP trois contenaires représentant respe
 
 Vous devez pour cela avoir installé docker sur votre machine, et l'avoir correctement configuré. Ouvrir la ligne de commande, et taper les instructions suivantes:
 
-1. Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:
+1. Télécharger l'image docker uploadée sur dockerhub:
 ``` Bash
-  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
+  docker pull liliasfaxi/spark-hadoop:hv-2.7.2
 ```
-2. Construire l'image Docker à partir du fichier Dockerfile fourni.
-``` Bash
-  cd hadoop-cluster-docker
-  ./build-image.sh
-```
-3. Démarrer les trois contenaires:
-```Bash
-  sudo ./start-container.sh
-```
+2. Créer les trois contenaires à partir de l'image téléchargée. Pour cela:
+   2.1. Créer un réseau qui permettra de relier les trois contenaires:
+    ``` Bash
+      docker network create --driver=bridge hadoop
+    ```
+    2.2. Créer et lancer les trois contenaires (les instructions -p permettent de faire un mapping entre les ports de la machine hôte et ceux du contenaire):
+    ```Bash
+      docker run -itd --net=hadoop -p 50070:50070 -p 8088:8088 -p 7077:7077 -p 16010:16010 \
+                --name hadoop-master --hostname hadoop-master \
+                liliasfaxi/spark-hadoop:hv-2.7.2
 
-!!! warning "Attention"
-    Le script _start-container.sh_ va réinitialiser les trois contenaires. Si vous voulez redémarrer un contenaire déjà créé, il ne faut pas l'exécuter de nouveau: tout sera effacé. Au lieu de cela, utiliser plutôt _docker start <container_id\>_. Pour lancer le shell, taper simplement (pour le master container, par exemple):
+      docker run -itd -p 8040:8042 --net=hadoop \
+            --name hadoop-slave1 --hostname hadoop-slave1 \
+                  liliasfaxi/spark-hadoop:hv-2.7.2
+
+      docker run -itd -p 8041:8042 --net=hadoop \
+            --name hadoop-slave2 --hostname hadoop-slave2 \
+                  liliasfaxi/spark-hadoop:hv-2.7.2
+    ```
+   3. Entrer dans le contenaire master pour commencer à l'utiliser.
 
     ```Bash
         docker exec -it hadoop-master bash
@@ -58,9 +66,6 @@ Vous devez pour cela avoir installé docker sur votre machine, et l'avoir correc
 Le résultat de cette exécution sera le suivant:
 
 ```Bash
-  start hadoop-master container...
-  start hadoop-slave1 container...
-  start hadoop-slave2 container...
   root@hadoop-master:~#
 ```
 

@@ -87,29 +87,24 @@ Un cluster Kafka consiste typiquement en plusieurs courtiers (Brokers) pour main
 Zookeeper est utilisé pour gérer et coordonner les courtiers Kafka. Il permet de notifier les producteurs et consommateurs de messages de la présence de tout nouveau courtier, ou de l'échec d'un courtier dans le cluster.
 
 ### Installation
-Kafka a été installé sur le même cluster que les deux TP précédents. Si vous disposez des contenaires, vous n'avez rien à faire. Sinon, vous pourrez les installer avec Docker comme suit:
+Kafka a été installé sur le même cluster que les deux TP précédents. Suivre les étapes décrites dans la partie _Installation_ du [TP1](tp1/index.html#installation) pour télécharger l'image et exécuter les trois contenaires. Si cela est déjà fait, il suffit de lancer vos machines grâce aux commandes suivantes:
 
-1. Cloner le repo github contenant les fichiers nécessaires pour le lancement des contenaires et leur configuration:
-``` Bash
-  git clone https://github.com/liliasfaxi/hadoop-cluster-docker
-```
-2. Construire l'image Docker à partir du fichier Dockerfile fourni.
-``` Bash
-  cd hadoop-cluster-docker
-  ./build-image.sh
-```
-3. Démarrer les trois contenaires:
 ```Bash
-  sudo ./start-container.sh
+  docker start hadoop-master hadoop-slave1 hadoop-slave2
 ```
-Le résultat de cette exécution sera le suivant:
+
+puis d'entrer dans le contenaire master:
+
 ```Bash
-  start hadoop-master container...
-  start hadoop-slave1 container...
-  start hadoop-slave2 container...
-  root@hadoop-master:~#
+    docker exec -it hadoop-master bash
 ```
-4. Lancer Kafka et Zookeeper en tapant :
+
+Lancer ensuite les démons yarn et hdfs:
+```Bash
+  ./start-hadoop.sh
+```
+
+Lancer Kafka et Zookeeper en tapant :
 ```Bash
   ./start-kafka-zookeeper.sh
 ```
