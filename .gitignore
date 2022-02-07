@@ -1,3 +1,4 @@
 .DS_Store
 commit_and_push.sh
 publish.sh
+run.sh

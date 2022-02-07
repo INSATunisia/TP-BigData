@@ -91,7 +91,7 @@ Toutes les commandes interagissant avec le système Hadoop commencent par hadoo
 
     ``` hadoop fs -mkdir -p /user/root```
 
-  - Nous allons utiliser le fichier  [purchases.txt](https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/purchases.txt) comme entrée pour le traitement MapReduce. Ce fichier se trouve déjà sous le répertoire principal de votre machine master.
+  - Nous allons utiliser le fichier  [purchases.txt](https://github.com/CodeMangler/udacity-hadoop-course/raw/master/Datasets/purchases.txt.gz) comme entrée pour le traitement MapReduce. Ce fichier se trouve déjà sous le répertoire principal de votre machine master.
   - Charger le fichier purchases dans le répertoire input que vous avez créé:
   ```Bash
     hadoop fs –put purchases.txt input
