@@ -25,6 +25,7 @@ plugins:
       minify_html: true
 
 markdown_extensions:
+  - footnotes
   - admonition
   - meta
   - toc:
