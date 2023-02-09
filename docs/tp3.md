@@ -1,5 +1,3 @@
-# TP3 - La Collecte de Données avec le Bus Kafka
-
 <center>![Distributed Data Collection](img/collect.png)</center>
 
 ## Télécharger PDF
@@ -559,5 +557,5 @@ Ecrire du texte dans la fenêtre du producteur. Ensuite, arrêter le flux de spa
 
 
 ## Homework
-Pour votre projet, vous allez utiliser Kafka pour gérer les flux entrants et les envoyer à Spark. Ces mêmes données (ou une partie de ces données) seront également stockés dans HDFS pour un traitement par lot ultérieur.
-Réaliser les liaisons nécessaires entre Kafka et Spark, puis Kafka et HDFS. Vous devez avoir une idée sur les traitements par lot que vous allez réaliser, pour savoir quelles données seront stockées dans HDFS.
+Pour votre projet, vous allez utiliser Kafka pour gérer les flux entrants et les envoyer à Spark. Ces mêmes données (ou une partie de ces données) peuvent également être stockées dans HDFS pour un traitement par lot ultérieur.
+Réaliser les liaisons nécessaires entre Kafka et Spark, puis Kafka et HDFS. 

@@ -1,5 +1,3 @@
-# TP4 - Stockage de Données dans une Base NOSQL avec HBase
-
 <center>![Distributed Data Base](img/ddb.jpg)</center>
 
 ## Télécharger PDF
@@ -457,3 +455,7 @@ Le résultat qui devra s'afficher ressemblera au suivant:
 !!!question "Activité"
 
       Modifier ce code pour qu'il puisse faire la somme des ventes de tous les produits.
+
+
+## Homework
+Pour la phase finale de votre projet, intégrez une base de données NOSQL. Cela peut être HBase, ou bien toute autre base telle que MongoDB ou Cassandra. L'objectif est de stocker dans cette base le résultat des traitements réalisés précédemment. Il est ensuite demandé d'utiliser un outil de visualisation de votre choix pour afficher des courbes ou graphes.

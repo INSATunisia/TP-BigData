@@ -1,5 +1,3 @@
-# TP1 - Le traitement Batch avec Hadoop HDFS et Map Reduce
-
 <center>![Batch Processing](img/batch.png)</center>
 
 
@@ -342,4 +340,9 @@ Il est également possible de voir le comportement des noeuds esclaves, en allan
     Veiller à toujours tester votre code en local avant de lancer un job sur le cluster!
 
 ## Homework
-Pour la séance prochaine, l'objectif est d'utiliser un cluster AWS-EMR (Elastic Map Reduce) de Amazon pour exécuter un Job Map Reduce de votre choix sur un vrai cluster distribué. Pour cela, utiliser les comptes [RosettaHub](https://www.rosettahub.com) qui vous ont été fournis.
+Vous allez, pour ce cours, réaliser un projet en trinôme ou quadrinôme, qui consiste en la construction d'une architecture Big Data supportant le streaming, le batch processing, et le dashboarding temps réel. Pour la séance prochaine, vous allez commencer par mettre les premières pierres à l'édifice:
+
+* Choisir la source de données sur laquelle vous allez travailler. Je vous invite à consulter les datasets offerts par [Kaggle](https://www.kaggle.com/) par exemple, ou chercher une source de streaming tel que Twitter.
+* Réfléchir à l'architecture cible. La pipeline devrait intégrer des traitements en batch, des traitements en streaming et une visualisation.
+
+

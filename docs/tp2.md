@@ -1,5 +1,3 @@
-# TP2 - Traitement par Lot et Streaming avec Spark
-
 <center>![Stream Processing](img/stream.png)</center>
 
 ## Télécharger PDF
@@ -128,7 +126,7 @@ L'exemple que nous allons présenter ici par étapes permet de relever les mots 
 
 ```Scala
   //Etape 1 - Créer un RDD à partir d'un fichier texte de Hadoop
-  val docs = spark.textFile("/docs")
+  val docs = sc.textFile("file1.txt")
 ```
 <center><img src="../img/tp2/ex1.png" width="500"></center>
 
@@ -164,7 +162,7 @@ L'exemple que nous allons présenter ici par étapes permet de relever les mots 
 
 ```Scala
   //Etape 6 - Inverser les tuples (action de sélection des n premiers)
-  val top = freq.map(_swap).top(N)
+  val top = freq.map(_.swap).top(N)
 ```
 <center><img src="../img/tp2/ex7.png" width="500"></center>
 
@@ -248,7 +246,7 @@ Nous allons dans cette partie créer un projet Spark Batch en Java (un simple Wo
 ### Test du code en local
 Pour tester le code sur votre machine, procéder aux étapes suivantes:
 
-  1. Insérer un fichier texte de votre choix (par exemple le fameux [loremipsum.txt](https://s3-eu-west-1.amazonaws.com/insat.lilia.bigdata.bucket/data/loremipsum.txt)) dans le répertoire src/main/resources.
+  1. Insérer un fichier texte de votre choix (par exemple le fameux [loremipsum.txt](https://generator.lorem-ipsum.info/) dans le répertoire src/main/resources.
   2. Créer une nouvelle configuration de type "Application" (_Run->Edit Configurations_) que vous appellerez _WordCountTask_, et définir les arguments suivants (fichier de départ et répertoire d'arrivée) comme _Program arguments_:
   ```
     src/main/resources/loremipsum.txt src/main/resources/out
@@ -495,4 +493,4 @@ Pour lancer le code précédent sur le cluster, il faudra d'abord faire des peti
 Observer le résultat.
 
 ## Homework
-Vous allez, pour ce cours, réaliser un projet en binôme, qui consiste en la construction d'une architecture Big Data supportant le streaming, le batch processing, et le dashboarding temps réel. Pour la séance prochaine, vous allez réfléchir au type de traitement que vous voulez réaliser (le flux de données en entrée, et les résultats en sortie). Vous allez commencer par utiliser Spark pour réaliser ces traitements, avec un stockage sur HDFS au besoin.
+Vous allez maintenant appliquer des traitements sur votre projet selon votre besoin. Vos contraintes ici est d'avoir les deux types de traitement: Batch et Streaming. Vous pouvez utiliser Map Reduce ou Spark pour le traitement en Batch. 
