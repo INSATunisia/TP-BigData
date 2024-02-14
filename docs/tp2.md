@@ -7,11 +7,11 @@
 Utilisation de Spark pour réaliser des traitements par lot et des traitements en streaming.
 
 ## Outils et Versions
-* [Apache Hadoop](http://hadoop.apache.org/) Version: 2.7.2
-* [Apache Spark](https://spark.apache.org/) Version: 2.2.1
-* [Docker](https://www.docker.com/) Version 17.09.1
-* [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) Version Ultimate 2016.1 (ou tout autre IDE de votre choix)
-* [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) Version 1.8
+* [Apache Hadoop](http://hadoop.apache.org/) Version: 3.3.6
+* [Apache Spark](https://spark.apache.org/) Version: 3.5.0
+* [Docker](https://www.docker.com/) Version *latest*
+* [Visual Studio Code](https://code.visualstudio.com/) Version 1.85.1 (ou tout autre IDE de votre choix)
+* [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) Version 1.8.
 * Unix-like ou Unix-based Systems (Divers Linux et MacOS)
 
 ## Spark
@@ -22,7 +22,7 @@ Utilisation de Spark pour réaliser des traitements par lot et des traitements e
 <center><img src="../img/tp2/spark-layers.png" width="500"></center>
 
 ### Spark et Hadoop
-Spark peut s'exécuter sur plusieurs plateformes: Hadoop, Mesos, en standalone ou sur le cloud. Il peut également accéder diverses sources de données, comme HDFS, Cassandra, HBase et S3.
+Spark peut s'exécuter sur plusieurs plateformes: Hadoop, Mesos, en standalone ou sur le cloud. Il peut également accéder à diverses sources de données, comme HDFS, Cassandra, HBase et S3.
 
 Dans ce TP, nous allons exécuter Spark sur Hadoop YARN. YARN s'occupera ainsi de la gestion des ressources pour le déclenchement et l'exécution des Jobs Spark.
 
@@ -30,55 +30,55 @@ Dans ce TP, nous allons exécuter Spark sur Hadoop YARN. YARN s'occupera ainsi d
 Nous avons procédé à l'installation de Spark sur le cluster Hadoop utilisé dans le [TP1](tp1/index.html). Suivre les étapes décrites dans la partie _Installation_ du [TP1](tp1/index.html#installation) pour télécharger l'image et exécuter les trois contenaires. Si cela est déjà fait, il suffit de lancer vos machines grâce aux commandes suivantes:
 
 ```Bash
-  docker start hadoop-master hadoop-slave1 hadoop-slave2
+docker start hadoop-master hadoop-worker1 hadoop-worker2
 ```
 
 puis d'entrer dans le contenaire master:
 
 ```Bash
-    docker exec -it hadoop-master bash
+docker exec -it hadoop-master bash
 ```
 
 Lancer ensuite les démons yarn et hdfs:
 ```Bash
-  ./start-hadoop.sh
+./start-hadoop.sh
 ```
 
 Vous pourrez vérifier que tous les démons sont lancés en tapant: ```jps```. Un résultat semblable au suivant pourra être visible:
 ```Bash
-  880 Jps
-  257 NameNode
-  613 ResourceManager
-  456 SecondaryNameNode
+880 Jps
+257 NameNode
+613 ResourceManager
+456 SecondaryNameNode
 ```
 
-La même opération sur les noeuds esclaves (auquels vous accédez à partir de votre machine hôte en tapant ```docker exec -it hadoop-slave1 bash```) devrait donner:
+La même opération sur les noeuds workers (auxquels vous accédez à partir de votre machine hôte de la même façon que le noeud maître, c'est à dire en tapant par exemple ```docker exec -it hadoop-worker1 bash```) devrait donner:
 ```bash
-  176 NodeManager
-  65 DataNode
-  311 Jps
+176 NodeManager
+65 DataNode
+311 Jps
 ```
 ## Test de Spark avec Spark-Shell
 
 Dans le but de tester l'exécution de spark, commencer par créer un fichier _file1.txt_ dans votre noeud master, contenant le texte suivant:
 ```
-  Hello Spark Wordcount!
-  Hello Hadoop Also :)
+Hello Spark Wordcount!
+Hello Hadoop Also :)
 ```
 
 Charger ensuite ce fichier dans HDFS:
 ```Bash
-  hadoop fs -put file1.txt
+hdfs dfs -put file1.txt
 ```
 
-!!! error
+??? error "Erreur possible"
       Si le message suivant s'affiche: ```put: `.': No such file or directory```, c'est parce que l'arborescence du répertoire principal n'est pas créée dans HDFS. Pour le faire, il suffit d'exécuter la commande suivante avant la commande de chargement :
       ```hadoop fs mkdir -p . ```
 
 
 Pour vérifier que spark est bien installé, taper la commande suivante:
 ```Bash
-  spark-shell
+spark-shell
 ```
 
 Vous devriez avoir un résultat semblable au suivant:
@@ -86,18 +86,18 @@ Vous devriez avoir un résultat semblable au suivant:
 
 Vous pourrez tester spark avec un code scala simple comme suit (à exécuter ligne par ligne):
 
-```Scala
-  val lines = sc.textFile("file1.txt")
-  val words = lines.flatMap(_.split("\\s+"))
-  val wc = words.map(w => (w, 1)).reduceByKey(_ + _)
-  wc.saveAsTextFile("file1.count")
+```Scala linenums="1"
+val lines = sc.textFile("file1.txt")
+val words = lines.flatMap(_.split("\\s+"))
+val wc = words.map(w => (w, 1)).reduceByKey(_ + _)
+wc.saveAsTextFile("file1.count")
 ```
 
 Ce code vient de (1) charger le fichier _file1.txt_ de HDFS, (2) séparer les mots selon les caractères d'espacement, (3) appliquer un _map_ sur les mots obtenus qui produit le couple (_<mot\>_, 1), puis un _reduce_ qui permet de faire la somme des 1 des mots identiques.
 
 Pour afficher le résultat, sortir de spark-shell en cliquant sur _Ctrl-C_. Télécharger ensuite le répertoire _file1.count_ créé dans HDFS comme suit:
 ```Bash
-  hadoop fs -get file1.count
+hdfs dfs -get file1.count
 ```
 Le contenu des deux fichiers _part-00000_ et _part-00001_ ressemble à ce qui suit:
 
@@ -125,44 +125,44 @@ Toutes les transformations dans Spark sont _lazy_, car elles ne calculent pas le
 L'exemple que nous allons présenter ici par étapes permet de relever les mots les plus fréquents dans un fichier. Pour cela, le code suivant est utilisé:
 
 ```Scala
-  //Etape 1 - Créer un RDD à partir d'un fichier texte de Hadoop
-  val docs = sc.textFile("file1.txt")
+//Etape 1 - Créer un RDD à partir d'un fichier texte de Hadoop
+val docs = sc.textFile("file1.txt")
 ```
 <center><img src="../img/tp2/ex1.png" width="500"></center>
 
 ```Scala
-  //Etape 2 - Convertir les lignes en minuscule
-  val lower = docs.map(line => line.toLowerCase)
+//Etape 2 - Convertir les lignes en minuscule
+val lower = docs.map(line => line.toLowerCase)
 ```
 <center><img src="../img/tp2/ex2.png" width="500"></center>
 
 ```Scala
-  //Etape 3 - Séparer les lignes en mots
-  val words = lower.flatMap(line => line.split("\\s+"))
+//Etape 3 - Séparer les lignes en mots
+val words = lower.flatMap(line => line.split("\\s+"))
 ```
 <center><img src="../img/tp2/ex3.png" width="500"></center>
 
 ```Scala
-  //Etape 4 - produire les tuples (mot, 1)
-  val counts = words.map(word => (word,1))
+//Etape 4 - produire les tuples (mot, 1)
+val counts = words.map(word => (word,1))
 ```
 <center><img src="../img/tp2/ex4.png" width="500"></center>
 
 ```Scala
-  //Etape 5 - Compter tous les mots
-  val freq = counts.reduceByKey(_ + _)
+//Etape 5 - Compter tous les mots
+val freq = counts.reduceByKey(_ + _)
 ```
 <center><img src="../img/tp2/ex5.png" width="500"></center>
 
 ```Scala
-  //Etape 6 - Inverser les tuples (transformation avec swap)
-  freq.map(_.swap)
+//Etape 6 - Inverser les tuples (transformation avec swap)
+freq.map(_.swap)
 ```
 <center><img src="../img/tp2/ex6.png" width="400"></center>
 
 ```Scala
-  //Etape 6 - Inverser les tuples (action de sélection des n premiers)
-  val top = freq.map(_.swap).top(N)
+//Etape 6 - Inverser les tuples (action de sélection des 3 premiers)
+val top = freq.map(_.swap).top(3)
 ```
 <center><img src="../img/tp2/ex7.png" width="500"></center>
 
@@ -170,33 +170,33 @@ L'exemple que nous allons présenter ici par étapes permet de relever les mots 
 ### Préparation de l'environnement et Code
 Nous allons dans cette partie créer un projet Spark Batch en Java (un simple WordCount), le charger sur le cluster et lancer le job.
 
-  1. Créer un projet Maven avec IntelliJ IDEA, en utilisant la config suivante:
+  1. Créer un projet Maven avec VSCode, en utilisant la config suivante:
   ```xml
-    <groupId>spark.batch</groupId>
-    <artifactId>wordcount</artifactId>
-    <version>1</version>
+  <groupId>spark.batch</groupId>
+  <artifactId>wordcount-spark</artifactId>
   ```
   2. Rajouter dans le fichier pom les dépendances nécessaires, et indiquer la version du compilateur Java:
   ```xml
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.22</version>
-        </dependency>
-    </dependencies>
+  <properties>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <dependencies>
+      <dependency>
+          <groupId>org.apache.spark</groupId>
+          <artifactId>spark-core_2.13</artifactId>
+          <version>3.5.0</version>
+      </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-reload4j</artifactId>
+          <version>2.1.0-alpha1</version>
+          <scope>test</scope>
+      </dependency>
+  </dependencies>
   ```
-  3. Sous le répertoire java, créer un package que vous appellerez _tn.insat.tp21_, et dedans, une classe appelée _WordCountTask_.
-  4. Écrire le code suivant dans _WordCountTask_ (N'oubliez pas de rajouter les imports nécessaires!):
+  3. Sous le répertoire java, créer un package que vous appellerez _spark.batch.tp21_, et dedans, une classe appelée _WordCountTask_.
+  4. Écrire le code suivant dans _WordCountTask.java_ :
   ```java
   import org.apache.spark.SparkConf;
   import org.apache.spark.api.java.JavaPairRDD;
@@ -207,13 +207,13 @@ Nous allons dans cette partie créer un projet Spark Batch en Java (un simple Wo
   import scala.Tuple2;
 
   import java.util.Arrays;
+  import com.google.common.base.Preconditions;
 
-  import static jersey.repackaged.com.google.common.base.Preconditions.checkArgument;
   public class WordCountTask {
         private static final Logger LOGGER = LoggerFactory.getLogger(WordCountTask.class);
 
         public static void main(String[] args) {
-            checkArgument(args.length > 1, "Please provide the path of input file and output dir as parameters.");
+            Preconditions.checkArgument(args.length > 1, "Please provide the path of input file and output dir as parameters.");
             new WordCountTask().run(args[0], args[1]);
         }
 
@@ -246,14 +246,13 @@ Nous allons dans cette partie créer un projet Spark Batch en Java (un simple Wo
 ### Test du code en local
 Pour tester le code sur votre machine, procéder aux étapes suivantes:
 
-  1. Insérer un fichier texte de votre choix (par exemple le fameux [loremipsum.txt](https://generator.lorem-ipsum.info/) dans le répertoire src/main/resources.
-  2. Créer une nouvelle configuration de type "Application" (_Run->Edit Configurations_) que vous appellerez _WordCountTask_, et définir les arguments suivants (fichier de départ et répertoire d'arrivée) comme _Program arguments_:
-  ```
-    src/main/resources/loremipsum.txt src/main/resources/out
-  ```
-  3. Cliquer sur OK, et lancer la configuration. Si tout se passe bien, un répertoire _out_ sera créé sous _resources_, qui contient deux fichiers: part-00000, part-00001.
+  1. Insérer un fichier texte de votre choix (par exemple le fameux [loremipsum.txt](https://generator.lorem-ipsum.info/)) dans le répertoire src/main/resources.
+  2. Lancer le programme en utilisant les arguments suivants:
+     1. **Arg1**:  le chemin du fichier _loremipsum.txt_
+     2. **Arg2**: le chemin d'un répertoire _out_ sous _resources_ (vous ne devez pas le créer)
+  1. Cliquer sur OK, et lancer la configuration. Si tout se passe bien, un répertoire _out_ sera créé sous _resources_, qui contient (entre autres) deux fichiers: part-00000, part-00001.
 
-![Resultat Batch Local](img/tp2/resultat-batch-local.png)
+<center><img src="../img/tp2/resultat-batch-local.png" width="200"></center>
 
 ### Lancement du code sur le cluster
 Pour exécuter le code sur le cluster, modifier comme indiqué les lignes en jaune dans ce qui suit:
@@ -284,58 +283,47 @@ public class WordCountTask {
 }
 ```
 
-Lancer ensuite une configuration de type Maven, avec les commandes _package install_. Un fichier intitulé _worcount-1.jar_ sera créé sous le répertoire target.
+Lancer ensuite une configuration de type Maven, avec la commande _package_. Un fichier intitulé _wordcount-spark-1.0-SNAPSHOT.jar_ sera créé sous le répertoire target.
 
-Nous allons maintenant copier ce fichier dans docker. Pour cela, naviguer vers le répertoire du projet avec votre terminal (ou plus simplement utiliser le terminal dans IntelliJ), et taper la commande suivante:
+Nous allons maintenant copier ce fichier dans docker. Pour cela, naviguer vers le répertoire du projet avec votre terminal (ou plus simplement utiliser le terminal dans VSCode), et taper la commande suivante:
 
 ```Bash
-  docker cp target/wordcount-1.jar hadoop-master:/root/wordcount-1.jar
+docker cp target/wordcount-spark-1.0-SNAPSHOT.jar hadoop-master:/root/wordcount-spark.jar
 ```
 
 Revenir à votre contenaire master, et lancer un job Spark en utilisant ce fichier jar généré, avec la commande ```spark-submit```, un script utilisé pour lancer des applications spark sur un cluster.
 
 ```Bash
-  spark-submit  --class tn.insat.tp21.WordCountTask
-                --master local
-                --driver-memory 4g --executor-memory 2g --executor-cores 1
-                wordcount-1.jar
-                input/purchases.txt
-                output
+spark-submit  --class spark.batch.tp21.WordCountTask --master local wordcount-spark.jar input/purchases.txt out-spark
 ```
 
   * Nous allons lancer le job en mode local, pour commencer.
-  * Le fichier en entrée est le fichier purchases.txt (que vous trouverez déjà chargé sur le contenaire master), et le résultat sera stocké dans un répertoire _output_.
+  * Le fichier en entrée est le fichier purchases.txt (que vous déjà chargé dans HDFS dans le TP précédent), et le résultat sera stocké dans un nouveau répertoire _out-spark_.
 
 !!!warning "Attention"
-      Vérifiez bien que le fichier _purchases_ existe dans le répertoire input de HDFS (et que le répertoire _output_ n'existe pas)!
+      Vérifiez bien que le fichier _purchases_ existe dans le répertoire input de HDFS (et que le répertoire _out-spark_ n'existe pas)!
       Si ce n'est pas le cas, vous pouvez le charger avec les commandes suivantes:
       ```
-        hadoop fs -mkdir -p input
-        hadoop fs -put purchases input
+      hdfs dfs -mkdir -p input
+      hdfs dfs -put purchases.txt input
       ```
 
-Si tout se passe bien, vous devriez trouver, dans le répertoire _output_, deux fichiers part-00000 et part-00001, qui ressemblent à ce qui suit:
+Si tout se passe bien, vous devriez trouver, dans le répertoire _out-spark_, deux fichiers part-00000 et part-00001, qui ressemblent à ce qui suit:
 
 <center><img src="../img/tp2/output-batch.png" width="300"></center>
 
 Nous allons maintenant tester le comportement de _spark-submit_ si on l'exécute en mode _cluster_ sur YARN. Pour cela, exécuter le code suivant:
-```Bash hl_lines="2 3"
-  spark-submit  --class tn.insat.tp21.WordCountTask
-                --master yarn
-                --deploy-mode cluster
-                --driver-memory 4g --executor-memory 2g --executor-cores 1
-                wordcount-1.jar
-                input/purchases.txt
-                output2
+```Bash
+  spark-submit  --class spark.batch.tp21.WordCountTask --master yarn --deploy-mode cluster wordcount-spark.jar input/purchases.txt out-spark2
 ```
 
   * En lançant le job sur Yarn, deux modes de déploiement sont possibles:
     - **Mode cluster**: où tout le job s'exécute dans le cluster, c'est à dire les Spark Executors (qui exécutent les vraies tâches) et le Spark Driver (qui ordonnance les Executors). Ce dernier sera encapsulé dans un YARN Application Master.
     - **Mode client** : où Spark Driver s'exécute sur la machine cliente (tel que votre propre ordinateur portable). Si votre machine s'éteint, le job s'arrête. Ce mode est approprié pour les jobs interactifs.
 
-Si tout se passe bien, vous devriez obtenir un répertoire output2 dans HDFS avec les fichiers usuels.
+Si tout se passe bien, vous devriez obtenir un répertoire out-spark2 dans HDFS avec les fichiers usuels.
 
-!!!bug "Erreur"
+???bug "En cas d'erreur: consulter les logs!"
       En cas d'erreur ou d'interruption du job sur Yarn, vous pourrez consulter les fichiers logs pour chercher le message d'erreur (le message affiché sur la console n'est pas assez explicite). Pour cela, sur votre navigateur, aller à l'adresse: ```http://localhost:8041/logs/userlogs```et suivez toujours les derniers liens jusqu'à _stderr_.
 
 ## Spark Streaming
@@ -361,136 +349,118 @@ Nous allons commencer par tester le streaming en local, comme d'habitude. Pour c
 
     <groupId>spark.streaming</groupId>
     <artifactId>stream</artifactId>
-    <version>1</version>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
-            <version>2.2.1</version>
+            <artifactId>spark-core_2.13</artifactId>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.11</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+          <groupId>org.apache.spark</groupId>
+          <artifactId>spark-streaming_2.13</artifactId>
+          <version>3.5.0</version>
+      </dependency>
 
+    </dependencies>
   </project>
   ```
-  2. Créer une classe _tn.insat.tp22.Stream_ avec le code suivant:
+  2. Créer une classe _spark.streaming.tp22.Stream_ avec le code suivant:
 
   ```java
-  import org.apache.spark.SparkConf;
-  import org.apache.spark.streaming.Durations;
-  import org.apache.spark.streaming.api.java.JavaDStream;
-  import org.apache.spark.streaming.api.java.JavaPairDStream;
-  import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
-  import org.apache.spark.streaming.api.java.JavaStreamingContext;
-  import scala.Tuple2;
+  import org.apache.spark.sql.Dataset;
+  import org.apache.spark.sql.Encoders;
+  import org.apache.spark.sql.SparkSession;
+  import org.apache.spark.sql.streaming.StreamingQuery;
+  import org.apache.spark.sql.streaming.StreamingQueryException;
+  import org.apache.spark.sql.streaming.Trigger;
 
+  import java.util.concurrent.TimeoutException;
   import java.util.Arrays;
 
-    public class Stream {
-      public static void main(String[] args) throws InterruptedException {
-          SparkConf conf = new SparkConf()
-              .setAppName("NetworkWordCount")
-              .setMaster("local[*]");
-          JavaStreamingContext jssc =
-              new JavaStreamingContext(conf, Durations.seconds(1));
+  public class Stream {
+      public static void main(String[] args) throws StreamingQueryException, TimeoutException  {
+          SparkSession spark = SparkSession
+              .builder()
+              .appName("NetworkWordCount")
+              .master("local[*]")
+              .getOrCreate();
 
-          JavaReceiverInputDStream<String> lines =
-              jssc.socketTextStream("localhost", 9999);
+          // Create DataFrame representing the stream of input lines from connection to localhost:9999
+          Dataset<String> lines = spark
+              .readStream()
+              .format("socket")
+              .option("host", "localhost")
+              .option("port", 9999)
+              .load()
+              .as(Encoders.STRING());
 
-          JavaDStream<String> words =
-              lines.flatMap(x -> Arrays.asList(x.split(" ")).iterator());
-          JavaPairDStream<String, Integer> pairs =
-              words.mapToPair(s -> new Tuple2<>(s, 1));
-          JavaPairDStream<String, Integer> wordCounts =
-              pairs.reduceByKey((i1, i2) -> i1 + i2);
+          // Split the lines into words
+          Dataset<String> words = lines.flatMap(
+              (String x) -> Arrays.asList(x.split(" ")).iterator(),
+              Encoders.STRING());
 
-          wordCounts.print();
-          jssc.start();
-          jssc.awaitTermination();
+          // Generate running word count
+          Dataset<org.apache.spark.sql.Row> wordCounts = words.groupBy("value").count();
+
+          // Start running the query that prints the running counts to the console
+          StreamingQuery query = wordCounts.writeStream()
+              .outputMode("complete")
+              .format("console")
+              .trigger(Trigger.ProcessingTime("1 second"))
+              .start();
+
+          query.awaitTermination();
       }
-    }
+  }
   ```
 
-  Ce code permet de calculer le nombre de mots dans un stream de données toutes les secondes.
+  Ce code permet de calculer le nombre de mots dans un stream de données (provenant du port localhost:9999) chaque seconde. Dans sa version actuelle, Spark encourage l'utilisation de _Structured Streaming_,une API de haut niveau qui fournit un traitement plus efficace, et qui est construite au dessus de Spark SQL, en intégrant les structures DataFrame et Dataset.
+
+
+???info "Trigger Interval"
+    Dans Spark Structured Streaming, le concept de microbatch est utilisé pour traiter les données en continu par petits lots incrémentaux. La durée de chaque micro-lot est configurable et détermine la fréquence de traitement des données en continu. Cette durée est appelée "intervalle de déclenchement".
+    Si vous ne spécifiez pas explicitement d'intervalle de déclenchement, le trigger par défaut est _ProcessingTime(0)_, qui est aussi connu comme le mode de traitement par micro-lots. Ce paramètre par défaut signifie que Spark essaiera de traiter les données aussi rapidement que possible, sans délai fixe entre les micro-lots.
+
 
 ### Test du code en Local
   Le stream ici sera diffusé par une petite commande utilitaire qui se trouve dans la majorité des systèmes Unix-like.
 
 
-  * Exécuter votre classe _Stream_. Vous verrez défiler sur votre console des lignes en continu: l'application est en écoute sur localhost:9999.
+
   * Ouvrir un terminal, et taper la commande suivante pour créer le stream:
     ```Bash
       nc -lk 9999
     ```
-    Vous pourrez alors taper les entrées de votre choix.
+  * Exécuter votre classe _Stream_. L'application est en écoute sur localhost:9999.
+  * Commencer à écrire des messages sur la console de votre terminal (là où vous avez lancé la commande nc)
 
-A chaque fois que vous entrez quelque chose sur le terminal, l'application l'intercepte, et l'affichage sur l'écran de la console change, comme suit:
 
-![Test Streaming](img/tp2/stream-intercepted.png)
+A chaque fois que vous entrez quelque chose sur le terminal, l'application Stream l'intercepte, et l'affichage sur l'écran de la console change, comme suit:
+<center><img src="../img/tp2/stream-intercepted.png" width="500"></center>
 
-Ensuite, pour voir le résultat final du comptage, arrêter l'exécution en cliquant sur le carré rouge, puis observer la console, vous verrez un affichage qui ressemble à ceci:
-
-![Test Streaming](img/tp2/stream-result.png)
 
 ### Lancement du code sur le cluster
 
-Pour lancer le code précédent sur le cluster, il faudra d'abord faire des petites modifications:
+Pour lancer le code précédent sur le cluster, il faudra d'abord faire une petite modification: **changer la valeur _localhost_ par l'IP de votre machine hote** (celle que vous utilisez pour lancer la commande _nc_). 
 
-```java hl_lines="3 7 8"
-    public class Stream {
-    public static void main(String[] args) throws InterruptedException {
-        SparkConf conf = new SparkConf().setAppName("NetworkWordCount");
-        JavaStreamingContext jssc =
-            new JavaStreamingContext(conf, Durations.seconds(1));
-
-        JavaReceiverInputDStream<String> lines =
-            jssc.socketTextStream("<votre-ip>", 9999);
-
-        JavaDStream<String> words =
-            lines.flatMap(x -> Arrays.asList(x.split(" ")).iterator());
-        JavaPairDStream<String, Integer> pairs =
-            words.mapToPair(s -> new Tuple2<>(s, 1));
-        JavaPairDStream<String, Integer> wordCounts =
-            pairs.reduceByKey((i1, i2) -> i1 + i2);
-
-        wordCounts.print();
-        jssc.start();
-        jssc.awaitTermination();
-    }
-  }
-```
-!!!warning "Attention"
-      Veillez à mettre l'IP de votre machine locale (sur laquelle vous allez lancer le flux avec _nc_) à la place de <votre-ip\>. Vous pourrez trouver votre IP avec la commande ifconfig.
-
-  * Lancer un ```mvn package install```pour créer le fichier jar.
-  * Copier le fichier jar sur le contenaire hadoop.
-  * Lancer la commande suivante:
+  * Générer le fichier jar.
+  * Copier le fichier jar sur le contenaire master.
+  * Assurez-vous que la commande _nc_ tourne bien sur votre machine, en attente de messages.
+  * Sur votre noeud master, lancer la commande suivante:
 
   ```bash
-      spark-submit --class tn.insat.tp22.Stream
-                   --master local
-                   --driver-memory 4g --executor-memory 2g --executor-cores 1
-                   stream-1.jar
+  spark-submit  --class spark.streaming.tp22.Stream --master local stream.jar
   ```
-Observer le résultat.
+Cette fois, énormément de texte est généré en continu sur la console. Comme nous avons défini dans l'application _console_ comme sortie, le résultat du traitement s'affichera au milieu de tout ce texte. Une fois que vous aurez saisi le texte à tester, arrêter l'application (avec Ctrl-C), et chercher dans le texte la chaîne "**Batch:**". Vous trouverez normalement un résultat semblable au suivant:
+
+<center><img src="../img/tp2/stream-output.png" width="700"></center>
 
 ## Homework
 Vous allez maintenant appliquer des traitements sur votre projet selon votre besoin. Vos contraintes ici est d'avoir les deux types de traitement: Batch et Streaming. Vous pouvez utiliser Map Reduce ou Spark pour le traitement en Batch. 
