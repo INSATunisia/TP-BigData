@@ -37,7 +37,8 @@ Vous devez pour cela avoir installé docker sur votre machine, et l'avoir correc
 docker pull liliasfaxi/hadoop-cluster:latest
 ```
 2. Créer les trois contenaires à partir de l'image téléchargée. Pour cela:
-   2.1. Créer un réseau qui permettra de relier les trois contenaires:
+   
+    2.1. Créer un réseau qui permettra de relier les trois contenaires:
     ``` Bash
     docker network create --driver=bridge hadoop
     ```
@@ -88,8 +89,12 @@ hdfs dfs –mkdir -p input
 
     ``` hdfs dfs -mkdir -p /user/root```
 
-  - Nous allons utiliser le fichier  [purchases.txt](https://github.com/CodeMangler/udacity-hadoop-course/raw/master/Datasets/purchases.txt.gz) comme entrée pour le traitement MapReduce. Ce fichier se trouve déjà sous le répertoire principal de votre machine master.
-  - Charger le fichier purchases dans le répertoire input que vous avez créé:
+  - Nous allons utiliser le fichier  [purchases.txt](https://github.com/CodeMangler/udacity-hadoop-course/raw/master/Datasets/purchases.txt.gz) comme entrée pour le traitement MapReduce. 
+  - Commencer par décompresser le fichier sur votre machine, puis par le charger dans le contenaire ```hadoop-master``` avec la commande suivante:
+  ```Bash
+  docker cp purchases.txt hadoop-master:/root/purchases.txt
+  ```
+  - À partir du contenaire master, charger le fichier purchases dans le répertoire input (de HDFS) que vous avez créé:
   ```Bash
   hdfs dfs –put purchases.txt input
   ```

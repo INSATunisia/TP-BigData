@@ -21,12 +21,12 @@ Le cours comportera les chapitres suivants:
 * Bases de données NoSQL
 * _Putting it all together_
 
-Ce cours comporte cinq séances de travaux pratiques:
+Ce cours comporte quatre séances de travaux pratiques:
 
-* [TP1](tp1/index.html): Hadoop et Map Reduce
-* [TP2](tp2/index.html): Apache Spark
-* [TP3](tp3/index.html): Apache Kafka
-* [TP4](tp4/index.html): HBase
+* TP1: Hadoop et Map Reduce
+* TP2: Apache Spark
+* TP3: Apache Kafka
+* TP4: HBase
 
 _Lilia SFAXI_
 
