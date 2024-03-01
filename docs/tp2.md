@@ -360,7 +360,7 @@ Nous allons commencer par tester le streaming en local, comme d'habitude. Pour c
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.13</artifactId>
-            <version>2.5.0</version>
+            <version>3.5.0</version>
         </dependency>
         <dependency>
           <groupId>org.apache.spark</groupId>
