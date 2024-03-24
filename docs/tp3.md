@@ -7,12 +7,12 @@
 Utilisation de Kafka pour une collecte de données distribuée, et intégration avec Spark.
 
 ## Outils et Versions
-* [Apache Kafka](https://kafka.apache.org/) Version 2.11-0.8.2.1
-* [Apache Hadoop](http://hadoop.apache.org/) Version: 2.7.2
-* [Apache Spark](https://spark.apache.org/) Version: 2.2.1
-* [Docker](https://www.docker.com/) Version 17.09.1
-* [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) Version Ultimate 2016.1 (ou tout autre IDE de votre choix)
-* [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) Version 1.8
+* [Apache Kafka](https://kafka.apache.org/) Version 2.13-3.6.1
+* [Apache Hadoop](http://hadoop.apache.org/) Version: 3.3.6
+* [Apache Spark](https://spark.apache.org/) Version: 3.5.0
+* [Docker](https://www.docker.com/) Version *latest*
+* [Visual Studio Code](https://code.visualstudio.com/) Version 1.85.1 (ou tout autre IDE de votre choix)
+* [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html) Version 1.8.
 * Unix-like ou Unix-based Systems (Divers Linux et MacOS)
 
 ## Kafka
@@ -84,11 +84,13 @@ Un cluster Kafka consiste typiquement en plusieurs courtiers (Brokers) pour main
 
 Zookeeper est utilisé pour gérer et coordonner les courtiers Kafka. Il permet de notifier les producteurs et consommateurs de messages de la présence de tout nouveau courtier, ou de l'échec d'un courtier dans le cluster.
 
+Il est à noter que les nouvelles versions de Kafka abandonnent petit à petit Zookeeper pour une gestion interne des métadonnées, grâce au protocole de consensus appelé KRaft (Kafka Raft). 
+
 ### Installation
 Kafka a été installé sur le même cluster que les deux TP précédents. Suivre les étapes décrites dans la partie _Installation_ du [TP1](tp1/index.html#installation) pour télécharger l'image et exécuter les trois contenaires. Si cela est déjà fait, il suffit de lancer vos machines grâce aux commandes suivantes:
 
 ```Bash
-  docker start hadoop-master hadoop-slave1 hadoop-slave2
+  docker start hadoop-master hadoop-worker1 hadoop-worker2
 ```
 
 puis d'entrer dans le contenaire master:
@@ -106,11 +108,10 @@ Lancer Kafka et Zookeeper en tapant :
 ```Bash
   ./start-kafka-zookeeper.sh
 ```
-Les deux démons Kafka et Zookeeper seront lancés. Vous pourrez vérifier cela en tapant `jps` pour voir quels processus Java sont en exécution, vous devriez trouver les processus suivants:
+Les deux démons Kafka et Zookeeper seront lancés. Vous pourrez vérifier cela en tapant `jps` pour voir quels processus Java sont en exécution, vous devriez trouver les processus suivants (en plus des processus Hadoop usuels):
 ```Bash
   2756 Kafka
   53 QuorumPeerMain
-  6349 Jps
 ```
 
 ## Première utilisation de Kafka
@@ -119,9 +120,8 @@ Pour gérer les topics, Kafka fournit une commande appelée `kafka-topics.sh`.
 Dans un nouveau terminal, taper la commande suivante pour créer un nouveau topic appelé "Hello-Kafka".
 
 ```Bash
-  kafka-topics.sh --create --zookeeper localhost:2181
-                  --replication-factor 1 --partitions 1
-                  --topic Hello-Kafka
+  kafka-topics.sh --create --topic Hello-Kafka --replication-factor 1 --partitions 1 --bootstrap-server localhost:9092
+
 ```
 
 !!! warning "Attention"
@@ -130,10 +130,10 @@ Dans un nouveau terminal, taper la commande suivante pour créer un nouveau topi
 Pour afficher la liste des topics existants, il faudra utiliser:
 
 ```Bash
-  kafka-topics.sh --list --zookeeper localhost:2181
+  kafka-topics.sh --list --bootstrap-server localhost:9092
 ```
 
-Le résultat devrait être (parmi un grand nombre de lignes d'INFO):
+Le résultat devrait être :
 
 ```
   Hello-Kafka
@@ -148,11 +148,10 @@ Kafka fournit un exemple de producteur standard que vous pouvez directement util
 
 Tout ce que vous taperez dorénavant sur la console sera envoyé à Kafka. L'option ```--broker-list``` permet de définir la liste des courtiers auxquels vous enverrez le message. Pour l'instant, vous n'en disposez que d'un, et il est déployé à l'adresse localhost:9092.
 
-Pour lancer un consommateur, utiliser:
+Pour lancer le consommateur standard, utiliser:
 
 ```Bash
-  kafka-console-consumer.sh --zookeeper localhost:2181 —topic Hello-Kafka
---from-beginning
+  kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic Hello-Kafka --from-beginning
 ```
 
 Le résultat devra ressembler au suivant:
@@ -270,11 +269,12 @@ Lancer ensuite le producer en tapant:
 Pour voir le résultat saisi dans Kafka, il est possible d'utiliser le consommateur prédéfini de Kafka, à condition d'utiliser le même topic:
 
 ```bash
-  kafka-console-consumer.sh --zookeeper localhost:2181 --topic Hello-Kafka --from-beginning
+  kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic Hello-Kafka --from-beginning
 ```
 
-Le résultat devrait ressembler au suivant:
+Le résultat devrait contenir les données suivantes :
 ```
+0
 1
 2
 3
@@ -284,15 +284,16 @@ Le résultat devrait ressembler au suivant:
 7
 8
 9
-10
 ```
 
 ### Consommateur
-Pour créer un consommateur, procéder de même. Créer un fichier SimpleConsumer.java, avec le code suivant:
+Pour créer un consommateur, procéder de même. Créer un fichier ```SimpleConsumer.java```, avec le code suivant:
 
 ```Java
 import java.util.Properties;
 import java.util.Arrays;
+import java.time.Duration;
+
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -327,7 +328,7 @@ public class SimpleConsumer {
     int i = 0;
 
     while (true) {
-       ConsumerRecords<String, String> records = consumer.poll(100);
+       ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
        for (ConsumerRecord<String, String> record : records)
 
        // Afficher l'offset, clef et valeur des enregistrements du consommateur
@@ -367,11 +368,12 @@ offset = 41, key = 9, value = 9
 
 ## Intégration de Kafka avec Spark
 ### Utilité
-Kafka représente une plateforme potentielle pour le messaging et l'intégration de Spark streaming. Kafka agit comme étant le hub central pour les flux de données en temps réel, qui sont ensuite traités avec des algorithmes complexes par Spark Streaming. Une fois les données traitées, Spark Streaming peut publier les résultats dans un autre topic Kafka ou les stokcer dans HDFS, d'autres bases de données ou des dashboards.
+Kafka représente une plateforme potentielle pour le messaging et l'intégration de Spark streaming. Kafka agit comme étant le hub central pour les flux de données en temps réel, qui sont ensuite traités avec des algorithmes complexes par Spark Streaming. Une fois les données traitées, Spark Streaming peut publier les résultats dans un autre topic Kafka ou les stocker dans HDFS, d'autres bases de données ou des dashboards.
+
 ### Réalisation
 Pour faire cela, nous allons réaliser un exemple simple, où Spark Streaming consomme des données de Kafka pour réaliser l'éternel wordcount.
 
-Dans votre machine locale, ouvrir IntelliJ IDEA (ou tout autre IDE de votre choix) et créer un nouveau projet Maven, avec les propriétés suivantes:
+Dans votre machine locale, ouvrir votre IDE préféré et créer un nouveau projet Maven, avec les propriétés suivantes:
 
 ```properties
   groupId: spark.kafka
@@ -395,24 +397,32 @@ Une fois le projet créé, modifier le fichier pom.xml pour qu'il ressemble à c
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
-            <version>2.2.1</version>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>3.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.11</artifactId>
-            <version>2.2.1</version>
+            <artifactId>spark-streaming_2.12</artifactId>
+            <version>3.5.0</version>
+            <scope>provided</scope>
+        </dependency>
+       <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql-kafka-0-10_2.12</artifactId>
+            <version>3.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-kafka-0-8_2.11</artifactId>
-            <version>2.2.0</version>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>3.5.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>0.8.2.0</version>
-        </dependency>
+          <groupId>org.apache.kafka</groupId>
+          <artifactId>kafka-clients</artifactId>
+          <version>3.6.1</version>
+      </dependency>
+
     </dependencies>
 
     <build>
@@ -427,17 +437,12 @@ Une fois le projet créé, modifier le fichier pom.xml pour qu'il ressemble à c
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!--
-                         Bind the maven-assembly-plugin to the package phase
-              this will create a jar file without the storm dependencies
-              suitable for deployment to a cluster.
-             -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>tn.insat.tp3.SparkKafkaWordCount</mainClass>
+                            <mainClass>spark.kafka.SparkKafkaWordCount</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -453,97 +458,100 @@ Une fois le projet créé, modifier le fichier pom.xml pour qu'il ressemble à c
 ```
 Le plugin _maven-assembly-plugin_ est utile pour pouvoir créer un jar contenant toutes les dépendances du projet.
 
-Créer ensuite un package _tn.insat.tp3_ et une classe _SparkKafkaWordCount_. Le code de cette classe sera comme suit:
+Créer ensuite une classe _SparkKafkaWordCount_ sous le package spark.kafka. Le code de cette classe sera comme suit:
 
 ```Java
-package tn.insat.tp3;
+package spark.kafka;
 
-import org.apache.spark.SparkConf;
-import org.apache.spark.streaming.Duration;
-import org.apache.spark.streaming.api.java.*;
-import org.apache.spark.streaming.kafka.KafkaUtils;
+import java.util.Arrays;
+
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 
 import scala.Tuple2;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
+
 
 public class SparkKafkaWordCount {
-    private static final Pattern SPACE = Pattern.compile(" ");
-
-    private SparkKafkaWordCount() {
-    }
+    
 
     public static void main(String[] args) throws Exception {
-        if (args.length < 4) {
-            System.err.println("Usage: SparkKafkaWordCount <zkQuorum> <group> <topics> <numThreads>");
+        
+
+        if (args.length < 3) {
+            System.err.println("Usage: SparkKafkaWordCount <bootstrap-servers> <subscribe-topics> <group-id>");
             System.exit(1);
         }
 
-        SparkConf sparkConf = new SparkConf().setAppName("SparkKafkaWordCount");
-        // Creer le contexte avec une taille de batch de 2 secondes
-        JavaStreamingContext jssc = new JavaStreamingContext(sparkConf,
-            new Duration(2000));
+        String bootstrapServers = args[0];
+        String topics = args[1];
+        String groupId = args[2];
 
-        int numThreads = Integer.parseInt(args[3]);
-        Map<String, Integer> topicMap = new HashMap<>();
-        String[] topics = args[2].split(",");
-        for (String topic: topics) {
-            topicMap.put(topic, numThreads);
-        }
+        SparkSession spark = SparkSession
+                .builder()
+                .appName("SparkKafkaWordCount")
+                .getOrCreate();
 
-        JavaPairReceiverInputDStream<String, String> messages =
-                KafkaUtils.createStream(jssc, args[0], args[1], topicMap);
+        // Create DataFrame representing the stream of input lines from Kafka
+        Dataset<Row> df = spark
+                .readStream()
+                .format("kafka")
+                .option("kafka.bootstrap.servers", bootstrapServers)
+                .option("subscribe", topics)
+                .option("kafka.group.id", groupId)
+                .load();
 
-        JavaDStream<String> lines = messages.map(Tuple2::_2);
-
-        JavaDStream<String> words =
-                lines.flatMap(x -> Arrays.asList(SPACE.split(x)).iterator());
-
-        JavaPairDStream<String, Integer> wordCounts =
-                words.mapToPair(s -> new Tuple2<>(s, 1))
-                     .reduceByKey((i1, i2) -> i1 + i2);
-
-        wordCounts.print();
-        jssc.start();
-        jssc.awaitTermination();
+        df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+                .as(Encoders.tuple(Encoders.STRING(), Encoders.STRING()))
+                .flatMap((FlatMapFunction<Tuple2<String, String>, String>) value -> Arrays.asList(value._2.split(" ")).iterator(), Encoders.STRING())
+                .groupByKey((MapFunction<String, String>) value -> value, Encoders.STRING())
+                .count()
+                .writeStream()
+                .outputMode("complete")
+                .format("console")
+                .start()
+                .awaitTermination();
     }
 }
 ```
+Ce code est un exemple d'application Spark utilisant l'intégration de Spark avec Kafka pour effectuer un comptage de mots en temps réel (WordCount) à partir des messages Kafka. Voici ce que fait chaque partie du code :
 
-KafkaUtils API est utilisée pour connecter le cluster Kafka à Spark Streaming. La méthode _createStream_ est utilisée, pour créer un flux en entrée, qui extrait les messages des courtiers Kafka. Elle prend en paramètres:
+  1. **Initialisation de SparkSession** : Le code commence par créer une instance de SparkSession, nécessaire pour exécuter toute application Spark.
+  2. **Paramètres d'entrée** : Le programme attend trois arguments - l'adresse des serveurs Kafka (*bootstrapServers*), les topics auxquels s'abonner (*topics*) et l'identifiant du groupe consommateur Kafka (*groupId*).
+  3. **Lecture des données de Kafka** : Le DataFrame df est créé en lisant le flux de données à partir de Kafka en utilisant les paramètres fournis. Les données lues incluent key et value pour chaque message Kafka.
+  4. **Traitement des données** :
+     * Le code transforme les données en castant *key* et *value* en chaînes de caractères.
+     * Ensuite, il utilise la fonction *flatMap* pour diviser chaque valeur (chaque ligne de texte des messages Kafka) en mots individuels.
+     * Il utilise *groupByKey* pour regrouper les mots identiques.
+  5. **Comptage et écriture** : Il compte le nombre d'occurrences de chaque mot (*count*) et écrit le résultat du comptage en continu à la console (*writeStream.format("console")*).
+  6. **Exécution** : L'application démarre le traitement du flux avec *start*() et attend que le traitement soit terminé avec *awaitTermination*().
 
-  * L' objet StreamingContext
-  * Le(s) serveur(s) Zookeeper
-  * L'identifiant du groupe du consommateur courant
-  * Une Map des topics à consommateur
 
-Créer une configuration Maven pour lancer la commande:
+Nous allons ensuite réer une configuration Maven pour lancer la commande:
 
 ```bash
   mvn clean compile assembly:single
 ```
 
-Dans le répertoire target, un fichier stream-kafka-spark-1-jar-with-dependencies.jar est créé. Copier ce fichier dans le contenaire master, en utilisant le terminal d'IntelliJ:
+Dans le répertoire target, un fichier ```stream-kafka-spark-1-jar-with-dependencies.jar``` est créé. Copier ce fichier dans le contenaire master, en utilisant le terminal comme suit:
 
 ```Bash
   docker cp target/stream-kafka-spark-1-jar-with-dependencies.jar hadoop-master:/root
 ```
 
-Revenir à votre contenaire master, et lancer la commande spark-submit pour lancer l'écouteur de streaming spark.
+Revenir à votre contenaire master, et lancer la commande ```spark-submit``` pour lancer l'écouteur de streaming spark.
 
 ```bash
-spark-submit --class tn.insat.tp3.SparkKafkaWordCount
-             --master local[2]
-             stream-kafka-spark-1-jar-with-dependencies.jar
-             localhost:2181 test Hello-Kafka 1 >> out
+spark-submit --class spark.kafka.SparkKafkaWordCount --master local  stream-kafka-spark-1-jar-with-dependencies.jar localhost:9092 Hello-Kafka mySparkConsumerGroup >> out
 ```
 
-Les quatre options à la fin de la commande sont requises par la classe  SparkKafkaWordCount et représentent respectivement l'adresse de zookeeper, le nom du groupe auquel appartient le consommateur, le nom du topic et le nombre de threads utilisés.
+Les trois options à la fin de la commande sont requises par la classe  *SparkKafkaWordCount* et représentent respectivement l'adresse du broker, le nom du topic et l'identifiant du groupe de consommateurs Kafka (ensemble de consommateurs (processus ou threads) qui s'abonnent aux mêmes topics et qui travaillent ensemble pour consommer les données).
 
 !!! tip "Remarque"
-      \>>out est utilisée pour stocker les résultats produits par spark streaming dans un fichier appelé out.
+      \>>out est utilisé pour stocker les résultats produits par spark streaming dans un fichier appelé *out*.
 
 Dans un autre terminal, lancer le producteur prédéfini de Kafka pour tester la réaction du consommateur spark streaming:
 

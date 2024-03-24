@@ -76,7 +76,7 @@ pages:
    - Travaux Pratiques Big Data: 'index.md'
    - TP1 - Le traitement Batch avec Hadoop HDFS et Map Reduce: 'tp1.md'
    - TP2 - Traitement par Lot et Streaming avec Spark: 'tp2.md'
-   #- TP3 - La Collecte de Données avec le Bus Kafka: 'tp3.md'
+   - TP3 - La Collecte de Données avec le Bus Kafka: 'tp3.md'
    #- TP4 - Stockage de Données dans une Base NOSQL avec HBase: 'tp4.md'
 
 
